@@ -1,0 +1,134 @@
+@startuml CI/CD Pipeline for Agent Development
+
+skinparam backgroundColor #FEFEFE
+skinparam defaultFontName Arial
+skinparam defaultFontSize 10
+
+title DevSecOps CI/CD Pipeline for M365 Agents
+
+|Developer|
+start
+:Write/Update Agent Code;
+note right
+  - Agent manifest (JSON)
+  - API plugin code
+  - Test cases
+  - Documentation
+end note
+
+:Commit to Feature Branch;
+
+|CI Pipeline|
+:Trigger on PR;
+
+fork
+  :Static Analysis (SAST);
+  note right
+    - Code quality
+    - Security patterns
+    - Best practices
+  end note
+fork again
+  :Dependency Scan;
+  note right
+    - Known vulnerabilities
+    - License compliance
+    - Version freshness
+  end note
+fork again
+  :Secrets Detection;
+  note right
+    - API keys
+    - Connection strings
+    - Certificates
+  end note
+end fork
+
+if (Security Gates Pass?) then (yes)
+  :Build Agent Package;
+  note right
+    - Compile plugins
+    - Package manifest
+    - Generate artifacts
+    - Sign package
+  end note
+else (no)
+  |Developer|
+  :Fix Security Issues;
+  stop
+endif
+
+:Unit Tests;
+
+:Integration Tests;
+note right
+  - Mock API responses
+  - Agent flow tests
+  - Error handling
+end note
+
+:Adversarial Tests;
+note right
+  - Prompt injection
+  - Input validation
+  - Data leakage
+end note
+
+if (All Tests Pass?) then (yes)
+  :Publish to Artifact Registry;
+else (no)
+  |Developer|
+  :Fix Test Failures;
+  stop
+endif
+
+|CD Pipeline - Staging|
+:Deploy to Staging\n(Supported Zone);
+
+:Run Smoke Tests;
+
+:Performance/Load Tests;
+note right
+  - Response time SLA
+  - Concurrent users
+  - Token consumption
+end note
+
+:Security Validation;
+note right
+  - AI Red Team Agent scan
+  - Runtime protection verify
+  - Permission audit
+end note
+
+|Approval|
+:Request UAT Sign-off;
+
+:Request Security Sign-off;
+
+if (Approvals Obtained?) then (yes)
+  |CD Pipeline - Production|
+  :Deploy to Production\n(IT-Managed Zone);
+  note right
+    Deployment options:
+    - Blue-green
+    - Canary (5% → 25% → 100%)
+    - Feature flags
+  end note
+  
+  :Post-Deployment Validation;
+  
+  :Update Agent Registry;
+  
+  :Notify Stakeholders;
+  
+  :Enable Monitoring Alerts;
+  
+  stop
+else (no)
+  |Developer|
+  :Address Feedback;
+  stop
+endif
+
+@enduml

@@ -1,0 +1,87 @@
+@startuml Identity and API Integration Patterns
+
+skinparam backgroundColor #FEFEFE
+skinparam defaultFontName Arial
+skinparam defaultFontSize 10
+skinparam sequenceMessageAlign center
+
+title Identity & API Integration Patterns for Cross-Tenant Agents
+
+== Pattern 1: Delegated User Access (OBO Flow) ==
+
+actor "Corporate User" as user1
+participant "M365 Copilot" as copilot1
+participant "Corporate Agent" as agent1
+participant "Enterprise\nEntra ID" as entra1
+participant "Retail\nEntra ID" as entra2
+participant "Retail API" as api1
+
+user1 -> copilot1: Invoke agent
+copilot1 -> entra1: Authenticate user
+entra1 --> copilot1: Access token (user)
+copilot1 -> agent1: Execute with user token
+agent1 -> entra1: OBO token exchange\n(for Retail API scope)
+entra1 -> entra2: Cross-tenant token\n(B2B trust)
+entra2 --> agent1: Downstream token
+agent1 -> api1: Call API with\ndownstream token
+api1 --> agent1: Response
+agent1 --> copilot1: Agent response
+copilot1 --> user1: Display result
+
+note over entra1, entra2
+  Requires:
+  - Cross-tenant access settings
+  - B2B collaboration enabled
+  - API permissions consented
+end note
+
+== Pattern 2: Application-Only Access (Client Credentials) ==
+
+participant "Scheduled Job" as job
+participant "Corporate Agent" as agent2
+participant "Enterprise\nEntra ID" as entra3
+participant "Retail\nEntra ID" as entra4
+participant "Retail API" as api2
+
+job -> agent2: Trigger scheduled task
+agent2 -> entra3: Client credentials\n(certificate)
+entra3 --> agent2: App-only token
+agent2 -> api2: Call API\n(multi-tenant app)
+note right: Service principal\nexists in Retail\ntenant via consent
+api2 -> entra4: Validate token
+entra4 --> api2: Token valid
+api2 --> agent2: Response
+agent2 --> job: Task complete
+
+note over entra3, entra4
+  Requires:
+  - Multi-tenant app registration
+  - Admin consent in Retail tenant
+  - Certificate-based auth (no secrets)
+end note
+
+== Pattern 3: Workload Identity Federation ==
+
+participant "Azure Function\n(Agent Host)" as func
+participant "User-Assigned\nManaged Identity" as mi
+participant "Enterprise\nEntra ID" as entra5
+participant "Retail\nEntra ID" as entra6
+participant "Retail API" as api3
+
+func -> mi: Request token
+mi -> entra5: Federated credential\n(no secrets)
+entra5 --> mi: Token for\nmulti-tenant app
+mi --> func: Access token
+func -> api3: Call Retail API
+api3 -> entra6: Validate token
+entra6 --> api3: Token valid
+api3 --> func: Response
+
+note over mi
+  Benefits:
+  - No secrets to manage
+  - Auto-rotation
+  - Audit trail
+end note
+
+@enduml

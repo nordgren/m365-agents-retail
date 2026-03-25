@@ -1,0 +1,79 @@
+@startuml Agent Operational Flow
+
+skinparam backgroundColor #FEFEFE
+skinparam defaultFontName Arial
+skinparam defaultFontSize 10
+
+title Agent Lifecycle - Operational Flow
+
+== Agent Request Processing ==
+
+actor "User" as user
+participant "M365 Client\n(Teams/Outlook)" as client
+participant "M365 Copilot\nOrchestrator" as orchestrator
+participant "Agent\nRuntime" as agent
+participant "API Plugin" as plugin
+participant "Data Source" as data
+participant "Monitoring\n(App Insights)" as monitor
+participant "Audit Log\n(Purview)" as audit
+
+user -> client: Submit request\n"Check inventory for SKU-123"
+activate client
+
+client -> orchestrator: Forward request\nwith user context
+activate orchestrator
+
+orchestrator -> audit: Log request\n(user, timestamp, intent)
+
+orchestrator -> orchestrator: Intent detection\nand routing
+note right: Determines which\nagent to invoke
+
+orchestrator -> agent: Invoke declarative agent\nwith grounded context
+activate agent
+
+agent -> monitor: Start trace span
+
+agent -> plugin: Call inventory API\n(OBO token)
+activate plugin
+
+plugin -> data: Query inventory\nSKU-123
+activate data
+data --> plugin: Stock: 47 units
+deactivate data
+
+plugin --> agent: API response
+deactivate plugin
+
+agent -> agent: Generate response\nusing LLM
+
+agent -> monitor: End trace span\n(latency, tokens)
+
+agent -> audit: Log data access\n(what, where, who)
+
+agent --> orchestrator: Agent response
+deactivate agent
+
+orchestrator -> audit: Log response\n(completion status)
+
+orchestrator --> client: Formatted response
+deactivate orchestrator
+
+client --> user: "SKU-123 has 47 units\nin stock"
+deactivate client
+
+== Error Handling Flow ==
+
+user -> client: Request with\ninvalid data
+client -> orchestrator: Forward request
+orchestrator -> agent: Invoke agent
+agent -> plugin: Call API
+plugin -> data: Query
+data --> plugin: Error: Not found
+plugin --> agent: Error response
+agent -> monitor: Log error
+agent -> audit: Log failed access
+agent --> orchestrator: Error message\n(sanitized)
+orchestrator --> client: User-friendly\nerror message
+client --> user: "Item not found.\nPlease check SKU."
+
+@enduml

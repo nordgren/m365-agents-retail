@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" modified="2026-03-24T01:30:00.000Z" agent="M365 Agents Architecture" version="21.0.0" type="device">
+  <diagram name="Dual-Tenant Architecture" id="dual-tenant">
+    <mxGraphModel dx="1200" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        
+        <!-- Enterprise Tenant -->
+        <mxCell id="enterprise-tenant" value="Enterprise Tenant" style="swimlane;fillColor=#E3F2FD;strokeColor=#1565C0;fontStyle=1;fontSize=14" vertex="1" parent="1">
+          <mxGeometry x="40" y="40" width="500" height="400" as="geometry" />
+        </mxCell>
+        
+        <!-- Corporate User -->
+        <mxCell id="corp-user" value="Corporate User" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#1565C0;strokeColor=#1565C0" vertex="1" parent="enterprise-tenant">
+          <mxGeometry x="30" y="60" width="30" height="50" as="geometry" />
+        </mxCell>
+        
+        <!-- M365 Copilot -->
+        <mxCell id="corp-copilot" value="M365 Copilot" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#BBDEFB;strokeColor=#1565C0" vertex="1" parent="enterprise-tenant">
+          <mxGeometry x="100" y="60" width="100" height="40" as="geometry" />
+        </mxCell>
+        
+        <!-- Enterprise Identity -->
+        <mxCell id="ent-identity" value="Entra ID&#xa;(Enterprise)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#90CAF9;strokeColor=#1565C0" vertex="1" parent="enterprise-tenant">
+          <mxGeometry x="370" y="50" width="100" height="50" as="geometry" />
+        </mxCell>
+        
+        <!-- App Registration -->
+        <mxCell id="app-reg" value="App Registration&#xa;(Multi-tenant)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#64B5F6;strokeColor=#1565C0" vertex="1" parent="enterprise-tenant">
+          <mxGeometry x="370" y="120" width="100" height="50" as="geometry" />
+        </mxCell>
+        
+        <!-- Corporate Agents -->
+        <mxCell id="merch-agent" value="Merchandising&#xa;Agent" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#BBDEFB;strokeColor=#1565C0" vertex="1" parent="enterprise-tenant">
+          <mxGeometry x="100" y="130" width="90" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="supply-agent" value="Supply Chain&#xa;Agent" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#BBDEFB;strokeColor=#1565C0" vertex="1" parent="enterprise-tenant">
+          <mxGeometry x="210" y="130" width="90" height="40" as="geometry" />
+        </mxCell>
+        
+        <!-- Corporate Data -->
+        <mxCell id="corp-data-box" value="Corporate Data" style="swimlane;fillColor=#E8EAF6;strokeColor=#3F51B5" vertex="1" parent="enterprise-tenant">
+          <mxGeometry x="40" y="200" width="200" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="corp-sp" value="SharePoint" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=10;fillColor=#C5CAE9;strokeColor=#3F51B5" vertex="1" parent="corp-data-box">
+          <mxGeometry x="20" y="40" width="70" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="corp-dv" value="Dataverse" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=10;fillColor=#C5CAE9;strokeColor=#3F51B5" vertex="1" parent="corp-data-box">
+          <mxGeometry x="110" y="40" width="70" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="corp-lob" value="Corporate&#xa;LOB Systems" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=10;fillColor=#C5CAE9;strokeColor=#3F51B5" vertex="1" parent="corp-data-box">
+          <mxGeometry x="60" y="110" width="80" height="50" as="geometry" />
+        </mxCell>
+        
+        <!-- Retail Tenant -->
+        <mxCell id="retail-tenant" value="Retail Tenant" style="swimlane;fillColor=#FFF3E0;strokeColor=#E65100;fontStyle=1;fontSize=14" vertex="1" parent="1">
+          <mxGeometry x="840" y="40" width="500" height="400" as="geometry" />
+        </mxCell>
+        
+        <!-- Store Associate -->
+        <mxCell id="store-user" value="Store Associate" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#E65100;strokeColor=#E65100" vertex="1" parent="retail-tenant">
+          <mxGeometry x="30" y="60" width="30" height="50" as="geometry" />
+        </mxCell>
+        
+        <!-- Teams Frontline -->
+        <mxCell id="retail-teams" value="Teams&#xa;(Frontline)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFE0B2;strokeColor=#E65100" vertex="1" parent="retail-tenant">
+          <mxGeometry x="100" y="60" width="80" height="40" as="geometry" />
+        </mxCell>
+        
+        <!-- Retail Identity -->
+        <mxCell id="ret-identity" value="Entra ID&#xa;(Retail)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFCC80;strokeColor=#E65100" vertex="1" parent="retail-tenant">
+          <mxGeometry x="30" y="50" width="100" height="50" as="geometry" />
+        </mxCell>
+        
+        <!-- Service Principal -->
+        <mxCell id="svc-principal" value="Service Principal&#xa;(Consented)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFB74D;strokeColor=#E65100" vertex="1" parent="retail-tenant">
+          <mxGeometry x="30" y="120" width="100" height="50" as="geometry" />
+        </mxCell>
+        
+        <!-- Retail Agents -->
+        <mxCell id="store-agent" value="Store Ops&#xa;Agent" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFE0B2;strokeColor=#E65100" vertex="1" parent="retail-tenant">
+          <mxGeometry x="200" y="50" width="80" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="inv-agent" value="Inventory&#xa;Agent" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFE0B2;strokeColor=#E65100" vertex="1" parent="retail-tenant">
+          <mxGeometry x="300" y="50" width="80" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="wfm-agent" value="Workforce&#xa;Agent" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFE0B2;strokeColor=#E65100" vertex="1" parent="retail-tenant">
+          <mxGeometry x="400" y="50" width="80" height="40" as="geometry" />
+        </mxCell>
+        
+        <!-- Retail Data -->
+        <mxCell id="retail-data-box" value="Retail Data" style="swimlane;fillColor=#FBE9E7;strokeColor=#BF360C" vertex="1" parent="retail-tenant">
+          <mxGeometry x="200" y="120" width="280" height="260" as="geometry" />
+        </mxCell>
+        <mxCell id="pos" value="POS&#xa;System" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=10;fillColor=#FFCCBC;strokeColor=#BF360C" vertex="1" parent="retail-data-box">
+          <mxGeometry x="20" y="40" width="70" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="inventory" value="Inventory&#xa;Mgmt" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=10;fillColor=#FFCCBC;strokeColor=#BF360C" vertex="1" parent="retail-data-box">
+          <mxGeometry x="105" y="40" width="70" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="wfm" value="Workforce&#xa;Mgmt" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=10;fillColor=#FFCCBC;strokeColor=#BF360C" vertex="1" parent="retail-data-box">
+          <mxGeometry x="190" y="40" width="70" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="retail-sp" value="SharePoint&#xa;(Retail)" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=10;fillColor=#FFCCBC;strokeColor=#BF360C" vertex="1" parent="retail-data-box">
+          <mxGeometry x="20" y="110" width="70" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="cdp" value="Customer&#xa;Data Platform" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=10;fillColor=#FFCCBC;strokeColor=#BF360C" vertex="1" parent="retail-data-box">
+          <mxGeometry x="105" y="110" width="70" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="offers" value="Digital&#xa;Offers" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=10;fillColor=#FFCCBC;strokeColor=#BF360C" vertex="1" parent="retail-data-box">
+          <mxGeometry x="190" y="110" width="70" height="50" as="geometry" />
+        </mxCell>
+        
+        <!-- Cross-Tenant Integration Zone -->
+        <mxCell id="cross-tenant" value="Cross-Tenant Integration" style="swimlane;fillColor=#E8F5E9;strokeColor=#2E7D32;fontStyle=1;fontSize=12" vertex="1" parent="1">
+          <mxGeometry x="560" y="80" width="260" height="320" as="geometry" />
+        </mxCell>
+        <mxCell id="ctas" value="Cross-Tenant&#xa;Access Settings" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#C8E6C9;strokeColor=#2E7D32" vertex="1" parent="cross-tenant">
+          <mxGeometry x="60" y="40" width="130" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="b2b" value="B2B Collaboration&#xa;/ Sync" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#C8E6C9;strokeColor=#2E7D32" vertex="1" parent="cross-tenant">
+          <mxGeometry x="60" y="110" width="130" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="api-gw" value="API Gateway&#xa;(mTLS)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#C8E6C9;strokeColor=#2E7D32" vertex="1" parent="cross-tenant">
+          <mxGeometry x="60" y="180" width="130" height="50" as="geometry" />
+        </mxCell>
+        
+        <!-- Notes -->
+        <mxCell id="note1" value="Explicit trust&#xa;configuration" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;fillColor=#FFF9C4;strokeColor=#F9A825" vertex="1" parent="cross-tenant">
+          <mxGeometry x="70" y="250" width="110" height="50" as="geometry" />
+        </mxCell>
+        
+        <!-- Connections -->
+        <mxCell id="conn1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#1565C0;strokeWidth=2" edge="1" parent="1" source="app-reg" target="ctas">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="conn2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#E65100;strokeWidth=2" edge="1" parent="1" source="ctas" target="svc-principal">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="conn3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#2E7D32;strokeWidth=2;dashed=1" edge="1" parent="1" source="supply-agent" target="api-gw">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="conn4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#2E7D32;strokeWidth=2;dashed=1" edge="1" parent="1" source="api-gw" target="inventory">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <!-- Legend -->
+        <mxCell id="legend" value="Legend" style="swimlane;fillColor=#FAFAFA;strokeColor=#9E9E9E" vertex="1" parent="1">
+          <mxGeometry x="40" y="480" width="300" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="leg1" value="Enterprise Tenant" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E3F2FD;strokeColor=#1565C0" vertex="1" parent="legend">
+          <mxGeometry x="20" y="30" width="80" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="leg2" value="Retail Tenant" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF3E0;strokeColor=#E65100" vertex="1" parent="legend">
+          <mxGeometry x="110" y="30" width="80" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="leg3" value="Cross-Tenant" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E8F5E9;strokeColor=#2E7D32" vertex="1" parent="legend">
+          <mxGeometry x="200" y="30" width="80" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="leg4" value="Data Flow" style="endArrow=classic;html=1;strokeColor=#2E7D32;strokeWidth=2;dashed=1" edge="1" parent="legend">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="30" y="75" as="sourcePoint" />
+            <mxPoint x="130" y="75" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

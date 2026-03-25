@@ -1,0 +1,110 @@
+@startuml M365 Agents Conceptual Architecture
+
+!define RECTANGLE class
+
+skinparam backgroundColor #FEFEFE
+skinparam componentStyle rectangle
+skinparam defaultFontName Arial
+skinparam defaultFontSize 11
+
+title M365 Agents - High-Level Conceptual Architecture
+
+package "Client Layer" #E8F4FD {
+    [Microsoft Teams] as teams
+    [Outlook] as outlook
+    [SharePoint] as sharepoint
+    [M365 Web Apps] as webapps
+    [Custom Frontends] as custom
+}
+
+package "Orchestration Layer" #FFF3E0 {
+    [M365 Copilot Orchestrator] as orchestrator
+    [Copilot Studio Runtime] as studio_runtime
+    [Custom Engine Runtime] as custom_runtime
+}
+
+package "Agent Layer" #E8F5E9 {
+    [Declarative Agents] as declarative
+    [Copilot Studio Agents] as studio_agents
+    [Custom Engine Agents] as custom_agents
+    [API Plugins] as plugins
+    [Connectors] as connectors
+}
+
+package "Integration Layer" #F3E5F5 {
+    [Microsoft Graph] as graph
+    [Power Platform] as power
+    [Azure AI Services] as ai_services
+    [Custom APIs] as custom_api
+    [RAG Endpoints] as rag
+}
+
+package "Data Layer" #FFEBEE {
+    database "SharePoint/OneDrive" as sp_data
+    database "Dataverse" as dataverse
+    database "Azure SQL/Cosmos" as azure_db
+    database "Retail Systems" as retail_data
+    database "External SaaS" as external
+}
+
+package "Security & Governance" #ECEFF1 {
+    [Entra ID] as entra
+    [Conditional Access] as ca
+    [DLP Policies] as dlp
+    [Microsoft Purview] as purview
+}
+
+' Client to Orchestration
+teams --> orchestrator
+outlook --> orchestrator
+sharepoint --> orchestrator
+webapps --> orchestrator
+custom --> custom_runtime
+
+' Orchestration to Agents
+orchestrator --> declarative
+orchestrator --> studio_agents
+studio_runtime --> studio_agents
+custom_runtime --> custom_agents
+
+' Agents to Integration
+declarative --> plugins
+declarative --> connectors
+studio_agents --> power
+custom_agents --> custom_api
+plugins --> graph
+plugins --> rag
+connectors --> ai_services
+
+' Integration to Data
+graph --> sp_data
+power --> dataverse
+custom_api --> azure_db
+rag --> retail_data
+ai_services --> external
+
+' Security overlay
+entra -[hidden]-> orchestrator
+ca -[hidden]-> agents
+dlp -[hidden]-> data
+purview -[hidden]-> data
+
+note right of orchestrator
+  Microsoft-managed
+  orchestration with
+  foundation models
+end note
+
+note right of custom_runtime
+  Developer-managed
+  orchestration with
+  custom models
+end note
+
+note bottom of retail_data
+  POS, Inventory,
+  Workforce Management,
+  Customer Data Platform
+end note
+
+@enduml

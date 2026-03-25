@@ -1,0 +1,116 @@
+@startuml Dual-Tenant Agent Architecture
+
+skinparam backgroundColor #FEFEFE
+skinparam componentStyle rectangle
+skinparam defaultFontName Arial
+skinparam defaultFontSize 10
+
+title Dual-Tenant Agent Architecture (Enterprise + Retail)
+
+rectangle "Enterprise Tenant" #E3F2FD {
+    actor "Corporate User" as corp_user
+    
+    package "M365 Copilot" #BBDEFB {
+        [Copilot Client] as corp_copilot
+        [Copilot Orchestrator] as corp_orchestrator
+    }
+    
+    package "Corporate Agents" #90CAF9 {
+        [Merchandising Agent] as merch_agent
+        [Supply Chain Agent] as supply_agent
+        [HR Policy Agent] as hr_agent
+    }
+    
+    package "Corporate Data" #64B5F6 {
+        database "SharePoint\n(Corporate)" as corp_sp
+        database "Dataverse\n(Corporate)" as corp_dv
+        database "Corporate LOB" as corp_lob
+    }
+    
+    package "Identity (Enterprise)" #42A5F5 {
+        [Entra ID\n(Enterprise)] as corp_entra
+        [App Registration\n(Multi-tenant)] as corp_app
+    }
+}
+
+rectangle "Retail Tenant" #FFF3E0 {
+    actor "Store Associate" as store_user
+    
+    package "M365 (Retail)" #FFE0B2 {
+        [Teams\n(Frontline)] as retail_teams
+        [Copilot Chat] as retail_copilot
+    }
+    
+    package "Retail Agents" #FFCC80 {
+        [Store Ops Agent] as store_agent
+        [Inventory Agent] as inv_agent
+        [Workforce Agent] as wfm_agent
+    }
+    
+    package "Retail Data" #FFB74D {
+        database "SharePoint\n(Retail)" as retail_sp
+        database "POS System" as pos
+        database "Inventory\nManagement" as inventory
+        database "Workforce\nManagement" as wfm
+    }
+    
+    package "Identity (Retail)" #FFA726 {
+        [Entra ID\n(Retail)] as retail_entra
+        [Service Principal\n(Consented)] as retail_sp_app
+    }
+}
+
+rectangle "Cross-Tenant Integration" #E8F5E9 {
+    [Cross-Tenant\nAccess Settings] as ctas
+    [B2B Collaboration\nor Sync] as b2b
+    [API Gateway\n(mTLS)] as api_gw
+}
+
+' Enterprise internal flows
+corp_user --> corp_copilot
+corp_copilot --> corp_orchestrator
+corp_orchestrator --> merch_agent
+corp_orchestrator --> supply_agent
+corp_orchestrator --> hr_agent
+merch_agent --> corp_sp
+supply_agent --> corp_lob
+hr_agent --> corp_dv
+corp_user --> corp_entra
+
+' Retail internal flows
+store_user --> retail_teams
+store_user --> retail_copilot
+retail_teams --> store_agent
+retail_copilot --> inv_agent
+retail_copilot --> wfm_agent
+store_agent --> retail_sp
+inv_agent --> inventory
+inv_agent --> pos
+wfm_agent --> wfm
+store_user --> retail_entra
+
+' Cross-tenant flows
+corp_app <--> ctas
+ctas <--> retail_sp_app
+corp_entra <--> b2b
+b2b <--> retail_entra
+merch_agent --> api_gw
+api_gw --> inventory : Query Stock Levels
+supply_agent --> api_gw
+api_gw --> pos : Sales Data
+
+note bottom of ctas
+  Explicit trust configuration
+  - Inbound: Which Enterprise users allowed
+  - Outbound: Which Retail resources accessible
+  - Conditional Access requirements
+end note
+
+note bottom of api_gw
+  Secure cross-tenant API access
+  - Certificate authentication
+  - Rate limiting
+  - Audit logging
+end note
+
+@enduml

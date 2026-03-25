@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" modified="2026-03-24T01:30:00.000Z" agent="M365 Agents Architecture" version="21.0.0" type="device">
+  <diagram name="Conceptual Architecture" id="conceptual-arch">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        
+        <!-- Client Layer -->
+        <mxCell id="client-layer" value="Client Layer" style="swimlane;horizontal=0;fillColor=#E3F2FD;strokeColor=#1565C0;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="40" y="40" width="1000" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="teams" value="Microsoft Teams" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#BBDEFB;strokeColor=#1565C0" vertex="1" parent="client-layer">
+          <mxGeometry x="60" y="20" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="outlook" value="Outlook" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#BBDEFB;strokeColor=#1565C0" vertex="1" parent="client-layer">
+          <mxGeometry x="200" y="20" width="100" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="sharepoint" value="SharePoint" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#BBDEFB;strokeColor=#1565C0" vertex="1" parent="client-layer">
+          <mxGeometry x="320" y="20" width="100" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="m365apps" value="M365 Web Apps" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#BBDEFB;strokeColor=#1565C0" vertex="1" parent="client-layer">
+          <mxGeometry x="440" y="20" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="customfe" value="Custom Frontends" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#BBDEFB;strokeColor=#1565C0" vertex="1" parent="client-layer">
+          <mxGeometry x="580" y="20" width="130" height="40" as="geometry" />
+        </mxCell>
+        
+        <!-- Orchestration Layer -->
+        <mxCell id="orch-layer" value="Orchestration Layer" style="swimlane;horizontal=0;fillColor=#FFF3E0;strokeColor=#E65100;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="40" y="140" width="1000" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="copilot-orch" value="M365 Copilot Orchestrator" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFE0B2;strokeColor=#E65100" vertex="1" parent="orch-layer">
+          <mxGeometry x="100" y="20" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="studio-runtime" value="Copilot Studio Runtime" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFE0B2;strokeColor=#E65100" vertex="1" parent="orch-layer">
+          <mxGeometry x="320" y="20" width="160" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="custom-runtime" value="Custom Engine Runtime" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFE0B2;strokeColor=#E65100" vertex="1" parent="orch-layer">
+          <mxGeometry x="520" y="20" width="160" height="40" as="geometry" />
+        </mxCell>
+        
+        <!-- Agent Layer -->
+        <mxCell id="agent-layer" value="Agent Layer" style="swimlane;horizontal=0;fillColor=#E8F5E9;strokeColor=#2E7D32;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="40" y="240" width="1000" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="declarative" value="Declarative Agents" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#C8E6C9;strokeColor=#2E7D32" vertex="1" parent="agent-layer">
+          <mxGeometry x="60" y="20" width="140" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="studio-agents" value="Copilot Studio Agents" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#C8E6C9;strokeColor=#2E7D32" vertex="1" parent="agent-layer">
+          <mxGeometry x="220" y="20" width="150" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="custom-agents" value="Custom Engine Agents" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#C8E6C9;strokeColor=#2E7D32" vertex="1" parent="agent-layer">
+          <mxGeometry x="390" y="20" width="150" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="plugins" value="API Plugins" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#C8E6C9;strokeColor=#2E7D32" vertex="1" parent="agent-layer">
+          <mxGeometry x="560" y="20" width="100" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="connectors" value="Connectors" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#C8E6C9;strokeColor=#2E7D32" vertex="1" parent="agent-layer">
+          <mxGeometry x="680" y="20" width="100" height="40" as="geometry" />
+        </mxCell>
+        
+        <!-- Integration Layer -->
+        <mxCell id="int-layer" value="Integration Layer" style="swimlane;horizontal=0;fillColor=#F3E5F5;strokeColor=#7B1FA2;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="40" y="340" width="1000" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="graph" value="Microsoft Graph" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E1BEE7;strokeColor=#7B1FA2" vertex="1" parent="int-layer">
+          <mxGeometry x="60" y="20" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="power" value="Power Platform" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E1BEE7;strokeColor=#7B1FA2" vertex="1" parent="int-layer">
+          <mxGeometry x="200" y="20" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="aiservices" value="Azure AI Services" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E1BEE7;strokeColor=#7B1FA2" vertex="1" parent="int-layer">
+          <mxGeometry x="340" y="20" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="customapi" value="Custom APIs" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E1BEE7;strokeColor=#7B1FA2" vertex="1" parent="int-layer">
+          <mxGeometry x="480" y="20" width="100" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="rag" value="RAG Endpoints" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E1BEE7;strokeColor=#7B1FA2" vertex="1" parent="int-layer">
+          <mxGeometry x="600" y="20" width="110" height="40" as="geometry" />
+        </mxCell>
+        
+        <!-- Data Layer -->
+        <mxCell id="data-layer" value="Data Layer" style="swimlane;horizontal=0;fillColor=#FFEBEE;strokeColor=#C62828;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="40" y="440" width="1000" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="spdata" value="SharePoint&#xa;OneDrive" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=10;fillColor=#FFCDD2;strokeColor=#C62828" vertex="1" parent="data-layer">
+          <mxGeometry x="60" y="15" width="80" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="dataverse" value="Dataverse" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=10;fillColor=#FFCDD2;strokeColor=#C62828" vertex="1" parent="data-layer">
+          <mxGeometry x="160" y="15" width="80" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="azuredb" value="Azure SQL&#xa;Cosmos DB" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=10;fillColor=#FFCDD2;strokeColor=#C62828" vertex="1" parent="data-layer">
+          <mxGeometry x="260" y="15" width="80" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="retailsys" value="Retail Systems&#xa;(POS, Inventory,&#xa;WFM)" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=10;fillColor=#FFCDD2;strokeColor=#C62828" vertex="1" parent="data-layer">
+          <mxGeometry x="360" y="10" width="100" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="datalake" value="Data Lake" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=10;fillColor=#FFCDD2;strokeColor=#C62828" vertex="1" parent="data-layer">
+          <mxGeometry x="480" y="15" width="80" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="external" value="External&#xa;SaaS" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=10;fillColor=#FFCDD2;strokeColor=#C62828" vertex="1" parent="data-layer">
+          <mxGeometry x="580" y="15" width="80" height="60" as="geometry" />
+        </mxCell>
+        
+        <!-- Security Sidebar -->
+        <mxCell id="security-box" value="Security &amp; Governance" style="swimlane;fillColor=#ECEFF1;strokeColor=#455A64;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="800" y="140" width="220" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="entra" value="Entra ID" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#CFD8DC;strokeColor=#455A64" vertex="1" parent="security-box">
+          <mxGeometry x="20" y="30" width="80" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="ca" value="Conditional Access" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#CFD8DC;strokeColor=#455A64" vertex="1" parent="security-box">
+          <mxGeometry x="110" y="30" width="100" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="dlp" value="DLP Policies" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#CFD8DC;strokeColor=#455A64" vertex="1" parent="security-box">
+          <mxGeometry x="20" y="70" width="80" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="purview" value="Microsoft Purview" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#CFD8DC;strokeColor=#455A64" vertex="1" parent="security-box">
+          <mxGeometry x="110" y="70" width="100" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="keyvault" value="Azure Key Vault" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#CFD8DC;strokeColor=#455A64" vertex="1" parent="security-box">
+          <mxGeometry x="20" y="110" width="90" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="sentinel" value="Microsoft Sentinel" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#CFD8DC;strokeColor=#455A64" vertex="1" parent="security-box">
+          <mxGeometry x="120" y="110" width="90" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="defender" value="Defender for Cloud" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#CFD8DC;strokeColor=#455A64" vertex="1" parent="security-box">
+          <mxGeometry x="40" y="150" width="130" height="30" as="geometry" />
+        </mxCell>
+        
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
