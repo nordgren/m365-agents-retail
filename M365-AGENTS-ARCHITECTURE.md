@@ -1,9 +1,10 @@
 # Enterprise Architecture for M365 Agents in Multi-Tenant Retail Environments
 
-**Version:** 2.0  
+**Version:** 2.1  
 **Date:** 2026-04-02  
 **Classification:** Enterprise Architecture Proposal  
-**Scope:** Company-Agnostic, Enterprise-Grade
+**Scope:** Company-Agnostic, Enterprise-Grade  
+**Updated:** Incorporates Microsoft Agent 365 (GA May 1, 2026)
 
 ---
 
@@ -11,13 +12,14 @@
 
 1. [Executive Summary](#1-executive-summary)
 2. [Architecture Overview](#2-architecture-overview)
-3. [Reference Architectures](#3-reference-architectures)
-4. [Detailed Component Descriptions](#4-detailed-component-descriptions)
-5. [Security Architecture & Risks](#5-security-architecture--risks)
-6. [Operational Model](#6-operational-model)
-7. [Team Structure & RACI Matrix](#7-team-structure--raci-matrix)
-8. [Anti-Patterns and Common Risks](#8-anti-patterns-and-common-risks)
-9. [Glossary & Terminology](#9-glossary--terminology)
+3. [Microsoft Agent 365: The Native Control Plane](#3-microsoft-agent-365-the-native-control-plane) *(NEW)*
+4. [Reference Architectures](#4-reference-architectures)
+5. [Detailed Component Descriptions](#5-detailed-component-descriptions)
+6. [Security Architecture & Risks](#6-security-architecture--risks)
+7. [Operational Model](#7-operational-model)
+8. [Team Structure & RACI Matrix](#8-team-structure--raci-matrix)
+9. [Anti-Patterns and Common Risks](#9-anti-patterns-and-common-risks)
+10. [Glossary & Terminology](#10-glossary--terminology)
 
 ---
 
@@ -31,15 +33,17 @@ This document provides enterprise architects, security teams, and transformation
 
 ### Key Recommendations
 
-1. **Adopt a tiered agent governance model** differentiating personal productivity agents, departmental agents, and mission-critical enterprise agents—each with appropriate security, compliance, and oversight controls.
+1. **Adopt Microsoft Agent 365 as the native control plane** for agent governance, leveraging its Observe/Govern/Secure pillars to replace custom governance infrastructure where possible. (GA May 1, 2026; $15/user/month standalone or included in M365 E7 at $99/user/month)
 
-2. **Implement a zoned governance strategy** with distinct environments (Safe Zone for experimentation, Supported Zone for departmental use, IT-Managed Zone for production) that enforce progressive security and approval gates.
+2. **Implement Entra Agent ID for all production agents** to enable first-class identity management, Conditional Access policies, and Identity Protection for agents—treating agents with the same rigor as users and workloads.
 
-3. **Establish explicit cross-tenant trust relationships** using Microsoft Entra cross-tenant access settings, B2B collaboration, and cross-tenant synchronization where appropriate—avoiding implicit trust assumptions.
+3. **Adopt a tiered agent governance model** differentiating personal productivity agents, departmental agents, and mission-critical enterprise agents—each with appropriate security, compliance, and oversight controls.
 
-4. **Design for zero trust from day one** with identity-based access controls, network segmentation, secrets management via Azure Key Vault, and continuous monitoring integrated into CI/CD pipelines.
+4. **Establish explicit cross-tenant trust relationships** using Microsoft Entra cross-tenant access settings, B2B collaboration, and Agent Identity Blueprints for multi-tenant agents—avoiding implicit trust assumptions.
 
-5. **Create a dedicated Agent Governance CoE** that sets standards, manages the agent registry, coordinates cross-functional reviews, and provides shared services (templates, testing frameworks, observability) to agent development teams.
+5. **Design for zero trust from day one** with agent-specific Conditional Access policies, risk-based access controls, network segmentation, secrets management via Azure Key Vault, and continuous monitoring integrated into CI/CD pipelines.
+
+6. **Create a dedicated Agent Governance CoE** that leverages Agent 365's native capabilities while adding organization-specific policies, manages the agent registry, coordinates cross-functional reviews, and provides shared services (templates, testing frameworks, observability) to agent development teams.
 
 ### Business Value
 
@@ -115,9 +119,265 @@ Three primary patterns for multi-tenant agent architecture:
 
 ---
 
-## 3. Reference Architectures
+## 3. Microsoft Agent 365: The Native Control Plane
 
-### 3.1 Architecture A: Corporate-Only Agents (Baseline)
+> **General Availability:** May 1, 2026  
+> **Pricing:** $15/user/month standalone | Included in M365 E7 ($99/user/month)
+
+### 3.1 Overview
+
+Microsoft Agent 365 is the **native control plane for AI agents** in the Microsoft 365 ecosystem. It provides enterprise-grade capabilities for observing, governing, and securing agents at scale—replacing or augmenting many custom governance mechanisms previously required.
+
+Agent 365 introduces three core pillars:
+
+| Pillar | Capabilities | Key Features |
+|--------|-------------|--------------|
+| **Observe** | Visibility into agent activity across the organization | Agent registry (including shadow agent discovery), real-time monitoring, agent-data-people visualization, performance analytics |
+| **Govern** | Lifecycle management and policy enforcement | Agent onboarding workflows, access control, SDK/API standards, interoperability with Work IQ |
+| **Secure** | Threat protection and data security | Runtime threat detection, risk-based access, data protection integration with Purview, agent compromise remediation |
+
+### 3.2 Entra Agent ID: First-Class Agent Identities
+
+Agent 365 introduces **Microsoft Entra Agent ID**, which treats AI agents as first-class identity principals alongside users and workload identities.
+
+#### Identity Constructs
+
+| Construct | Description | Purpose |
+|-----------|-------------|---------|
+| **Agent Blueprint** | Logical definition of an agent type | Template for creating agent instances |
+| **Agent Identity Blueprint Principal** | Service principal representing the blueprint in a tenant | Creates agent identities and agent users |
+| **Agent Identity** | Instantiated agent identity | Performs token acquisitions to access resources |
+| **Agent User** | Non-human user identity for agent experiences | Used when agent requires user account context |
+| **Agent Resource** | Blueprint or identity acting as target resource | Enables agent-to-agent (A2A) flows |
+
+#### Impact on Identity Architecture
+
+**Before Agent 365:**
+- Agents used standard app registrations and service principals
+- No native distinction between agents and other applications
+- Custom governance required to track agent-specific behavior
+- Cross-tenant agents required multi-tenant app registrations with manual consent
+
+**With Agent 365:**
+- Agents get dedicated identity type with agent-specific attributes
+- Agent Registry provides complete inventory (including shadow agents)
+- Entra Agent ID enables agent-specific Conditional Access policies
+- Cross-tenant agents use **Agent Identity Blueprints** that can be brought into target tenants
+
+### 3.3 Conditional Access for Agents
+
+Agent 365 extends Conditional Access to agent identities, applying Zero Trust principles to agent access requests.
+
+#### How Conditional Access Applies
+
+| Flow | Conditional Access? | Notes |
+|------|---------------------|-------|
+| Agent Identity → Resource | ✅ Yes | Governed by agent identity policies |
+| Agent User → Resource | ✅ Yes | Governed by agent user policies |
+| Agent Blueprint → Graph (create agent) | ❌ No | Blueprint creation is privileged |
+| Agent → Token Exchange Endpoint | ❌ No | Intermediate exchange, not resource access |
+
+#### Policy Configuration Options
+
+**Assignments:**
+- All agent identities in tenant
+- Specific agents by object ID
+- Agents with specific custom security attributes
+- Agents grouped by blueprint
+
+**Conditions:**
+- Agent risk level (High/Medium/Low) from ID Protection
+- Custom security attributes on agents
+
+**Controls:**
+- Block risky agents
+- Require specific compliance posture
+- Report-only mode for simulation
+
+#### Replacing Custom Governance Gates
+
+| Previous Custom Gate | Agent 365 Native Replacement |
+|---------------------|------------------------------|
+| Manual agent registry | Agent 365 Agent Registry (auto-discovery) |
+| Custom approval workflows | Onboarding workflows with blueprint-based provisioning |
+| Ad hoc security reviews | Conditional Access policies + ID Protection for agents |
+| Custom monitoring dashboards | Agent 365 visualization and analytics |
+| Manual shadow agent discovery | Automatic shadow agent detection |
+
+### 3.4 Agent 365 Mapping to Architecture Patterns
+
+#### Pattern A: Corporate-Only Agents
+
+| Agent 365 Capability | Application in Pattern A |
+|---------------------|-------------------------|
+| **Agent Registry** | Single-tenant inventory; shadow agent discovery within corporate tenant |
+| **Conditional Access** | Block high-risk agents; require agents from approved blueprints only |
+| **Purview Integration** | Apply sensitivity labels to agent-accessed content; DLP on agent outputs |
+| **Visualization** | Map agent ↔ data ↔ user relationships within corporate boundary |
+
+**Configuration:**
+```
+Tenant: Enterprise
+├── Agent 365 enabled
+├── Agent Registry: Active (discovers all agents)
+├── Conditional Access Policies:
+│   ├── Block high-risk agent identities
+│   ├── Require approved blueprints for production agents
+│   └── Report-only for Tier 1-2 agents
+└── Purview: DLP policies apply to agent data access
+```
+
+#### Pattern B: Dual-Tenant Agents
+
+| Agent 365 Capability | Application in Pattern B |
+|---------------------|-------------------------|
+| **Agent Identity Blueprint** | Create blueprint in Enterprise Tenant; provision blueprint principal in Retail Tenant |
+| **Cross-Tenant Conditional Access** | Define policies in both tenants; coordinate trust settings |
+| **Federated Monitoring** | Agent 365 in each tenant; correlate via Sentinel for cross-tenant view |
+| **Shared Governance** | Common blueprints enable consistent agent behavior across tenants |
+
+**Cross-Tenant Agent Identity Flow:**
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                    ENTERPRISE TENANT                            │
+│                                                                 │
+│  ┌─────────────────┐    ┌─────────────────┐                    │
+│  │ Agent Blueprint │───►│ Agent Identity  │                    │
+│  │   (Template)    │    │  (Instance)     │                    │
+│  └─────────────────┘    └────────┬────────┘                    │
+│                                  │                              │
+└──────────────────────────────────┼──────────────────────────────┘
+                                   │
+              Cross-Tenant Access via Agent Identity Blueprint
+                                   │
+┌──────────────────────────────────┼──────────────────────────────┐
+│                                  ▼         RETAIL TENANT        │
+│                                                                 │
+│  ┌─────────────────────┐    ┌─────────────────┐                │
+│  │ Blueprint Principal │───►│  Agent Identity │                │
+│  │  (Consented Copy)   │    │ (Local Instance)│                │
+│  └─────────────────────┘    └────────┬────────┘                │
+│                                      │                          │
+│                            ┌─────────▼─────────┐               │
+│                            │  Retail Resources │               │
+│                            │  (POS, Inventory) │               │
+│                            └───────────────────┘               │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+**Conditional Access Configuration (Both Tenants):**
+```
+Enterprise Tenant:
+├── CA Policy: "Cross-Tenant Agent Access"
+│   ├── Applies to: Agent identities accessing Retail Tenant resources
+│   ├── Conditions: Agent risk = High → Block
+│   └── Grant: Require approved blueprint membership
+
+Retail Tenant:
+├── CA Policy: "Inbound Agent Validation"
+│   ├── Applies to: Agent identities from Enterprise Tenant
+│   ├── Conditions: Custom attribute "approved_for_retail" = true
+│   └── Grant: Allow with logging
+```
+
+#### Pattern C: Federated Agent Mesh
+
+| Agent 365 Capability | Application in Pattern C |
+|---------------------|-------------------------|
+| **Centralized Registry** | Agent 365 instances in each tenant; aggregate via API/Sentinel |
+| **Blueprint Distribution** | Define canonical blueprints; distribute principals to all tenants |
+| **Unified Conditional Access** | Standard CA policies deployed across all tenants via automation |
+| **Cross-Tenant Visualization** | Centralized dashboard aggregating Agent 365 data from all tenants |
+
+**Federated Governance Architecture:**
+```
+┌─────────────────────────────────────────────────────────────────┐
+│              GOVERNANCE HUB (Central Management)                │
+│                                                                 │
+│  ┌─────────────┐  ┌──────────────┐  ┌──────────────┐           │
+│  │  Canonical  │  │   Policy     │  │  Centralized │           │
+│  │ Blueprints  │  │   Templates  │  │  Monitoring  │           │
+│  └──────┬──────┘  └──────┬───────┘  └──────┬───────┘           │
+│         │                │                  │                   │
+│         │    Distribute Blueprints & Policies                   │
+│         │                │                  │                   │
+└─────────┼────────────────┼──────────────────┼───────────────────┘
+          │                │                  │
+    ┌─────┴─────┬──────────┴──────┬───────────┴─────┐
+    │           │                 │                 │
+    ▼           ▼                 ▼                 ▼
+┌────────┐  ┌────────┐      ┌────────┐       ┌────────┐
+│ Tenant │  │ Tenant │      │ Tenant │       │ Tenant │
+│   A    │  │   B    │      │   C    │       │   N    │
+│        │  │        │      │        │       │        │
+│Agent365│  │Agent365│      │Agent365│       │Agent365│
+│Enabled │  │Enabled │      │Enabled │       │Enabled │
+└────────┘  └────────┘      └────────┘       └────────┘
+```
+
+### 3.5 Licensing & Cost Model
+
+#### Licensing Options
+
+| License | Price | Includes | Best For |
+|---------|-------|----------|----------|
+| **Agent 365 Standalone** | $15/user/month | Agent 365 control plane only | Organizations adding agent governance to existing M365 |
+| **Microsoft 365 E7** | $99/user/month | E5 + Copilot + Entra Suite + Agent 365 | Organizations committed to AI-first productivity |
+
+#### What's Included vs. Consumption-Based
+
+| Component | Included in License | Consumption-Based |
+|-----------|--------------------|--------------------|
+| Agent Registry | ✅ | — |
+| Conditional Access for Agents | ✅ | — |
+| Agent 365 Admin Center | ✅ | — |
+| Monitoring & Visualization | ✅ | — |
+| Purview Integration | ✅ | — |
+| Copilot Credits (agent interactions) | ❌ | Pay-as-you-go or prepaid |
+| Azure Infrastructure (Functions, etc.) | ❌ | Azure consumption |
+
+#### M365 E7 Bundle Components
+
+```
+Microsoft 365 E7 ($99/user/month)
+├── Microsoft 365 E5 (productivity, security, compliance)
+├── Microsoft 365 Copilot ($30 value)
+├── Microsoft Entra Suite
+│   ├── Entra ID P2
+│   ├── Entra Internet Access
+│   ├── Entra Private Access
+│   └── Entra Suite Governance
+└── Microsoft Agent 365 ($15 value)
+
+Savings vs. à la carte: ~15%
+```
+
+### 3.6 Migration Considerations
+
+#### Transitioning Custom Governance to Agent 365
+
+| Phase | Activities | Timeline |
+|-------|-----------|----------|
+| **Assessment** | Inventory current agents; identify custom governance components; map to Agent 365 capabilities | Week 1-2 |
+| **Pilot** | Enable Agent 365 in non-production; migrate subset of agents to Agent ID; test Conditional Access | Week 3-6 |
+| **Parallel Run** | Run Agent 365 alongside custom governance; validate feature parity; train teams | Week 7-12 |
+| **Cutover** | Migrate production agents to Agent ID; deprecate custom registry; enable native policies | Week 13-16 |
+| **Optimization** | Retire custom components; leverage advanced Agent 365 features; continuous improvement | Ongoing |
+
+#### What to Keep Custom
+
+Even with Agent 365, organizations may retain custom components for:
+
+- **Organization-specific approval workflows** beyond Agent 365's onboarding
+- **Integration with non-Microsoft systems** (ITSM, legacy GRC tools)
+- **Industry-specific compliance requirements** not covered by Purview
+- **Advanced analytics** beyond Agent 365's native visualization
+
+---
+
+## 4. Reference Architectures
+
+### 4.1 Architecture A: Corporate-Only Agents (Baseline)
 
 **Scenario:** Agents serve only corporate users within the Enterprise Tenant. No cross-tenant requirements.
 
@@ -162,7 +422,7 @@ SharePoint / OneDrive / Dataverse
 
 ---
 
-### 3.2 Architecture B: Dual-Tenant Agents (Corporate + Retail)
+### 4.2 Architecture B: Dual-Tenant Agents (Corporate + Retail)
 
 **Scenario:** Agents operate across Enterprise and Retail tenants, enabling use cases like:
 - Corporate merchandising agents querying store inventory
@@ -250,7 +510,7 @@ SharePoint / OneDrive / Dataverse
 
 ---
 
-### 3.3 Architecture C: Federated Agent Mesh
+### 4.3 Architecture C: Federated Agent Mesh
 
 **Scenario:** Large enterprise with multiple tenants (regional, M&A legacy, regulatory separation) requiring unified agent governance with distributed execution.
 
@@ -329,7 +589,7 @@ SharePoint / OneDrive / Dataverse
 
 ---
 
-### 3.4 Architecture Decision Criteria
+### 4.4 Architecture Decision Criteria
 
 Use this decision matrix to select the appropriate reference architecture:
 
@@ -375,7 +635,7 @@ Use this decision matrix to select the appropriate reference architecture:
 
 ---
 
-### 3.5 Failure Modes & Remediation
+### 4.5 Failure Modes & Remediation
 
 #### Pattern A: Corporate-Only Failure Modes
 
@@ -409,7 +669,7 @@ Use this decision matrix to select the appropriate reference architecture:
 
 ---
 
-### 3.6 Cost Model & Implications
+### 4.6 Cost Model & Implications
 
 #### Cost Categories
 
@@ -454,7 +714,7 @@ Use this decision matrix to select the appropriate reference architecture:
 
 ---
 
-### 3.7 Operational Runbooks
+### 4.7 Operational Runbooks
 
 #### Runbook 1: Agent Deployment
 
@@ -654,11 +914,11 @@ Use this decision matrix to select the appropriate reference architecture:
 
 ---
 
-## 4. Detailed Component Descriptions
+## 5. Detailed Component Descriptions
 
-### 4.1 Identity & Access Components
+### 5.1 Identity & Access Components
 
-#### 4.1.1 Entra ID (Azure AD)
+#### 5.1.1 Entra ID (Azure AD)
 
 **Role:** Primary identity provider for all M365 agent authentication and authorization.
 
@@ -673,7 +933,7 @@ Use this decision matrix to select the appropriate reference architecture:
 - Cross-tenant synchronization for seamless user experience
 - Multi-tenant organization (MTO) for simplified collaboration
 
-#### 4.1.2 App Registrations
+#### 5.1.2 App Registrations
 
 **Role:** Define applications (agents) that can authenticate to Entra ID and access resources.
 
@@ -696,7 +956,7 @@ Enterprise Tenant                    Retail Tenant
 └─────────────────────┘              └─────────────────────┘
 ```
 
-#### 4.1.3 Managed Identities
+#### 5.1.3 Managed Identities
 
 **Role:** Eliminate secrets for Azure-hosted agent components.
 
@@ -709,9 +969,9 @@ Enterprise Tenant                    Retail Tenant
 - Federate user-assigned managed identity with multi-tenant app registration
 - Eliminates client secret management for cross-tenant auth
 
-### 4.2 Agent Runtime Components
+### 5.2 Agent Runtime Components
 
-#### 4.2.1 Declarative Agents
+#### 5.2.1 Declarative Agents
 
 **Architecture:**
 - Defined via JSON manifest (instructions, knowledge sources, actions)
@@ -736,7 +996,7 @@ Enterprise Tenant                    Retail Tenant
 - Large data processing
 - Custom AI models
 
-#### 4.2.2 Custom Engine Agents
+#### 5.2.2 Custom Engine Agents
 
 **Architecture:**
 - Code-first implementation (C#, Python, JavaScript)
@@ -753,7 +1013,7 @@ Enterprise Tenant                    Retail Tenant
 - Integration with non-M365 systems
 - Custom security or compliance requirements
 
-#### 4.2.3 Copilot Studio Agents
+#### 5.2.3 Copilot Studio Agents
 
 **Architecture:**
 - Low-code visual builder
@@ -765,9 +1025,9 @@ Enterprise Tenant                    Retail Tenant
 - DLP policies on connectors
 - Tenant-level and environment-level controls
 
-### 4.3 Integration Components
+### 5.3 Integration Components
 
-#### 4.3.1 API Plugins
+#### 5.3.1 API Plugins
 
 **Role:** Connect agents to external APIs and LOB systems.
 
@@ -782,7 +1042,7 @@ Enterprise Tenant                    Retail Tenant
 - Rate limiting and throttling
 - Response validation and sanitization
 
-#### 4.3.2 RAG (Retrieval-Augmented Generation)
+#### 5.3.2 RAG (Retrieval-Augmented Generation)
 
 **Role:** Ground agent responses in enterprise knowledge.
 
@@ -796,9 +1056,9 @@ Enterprise Tenant                    Retail Tenant
 - Data classification inheritance
 - Prompt injection protection
 
-### 4.4 Retail-Specific Components
+### 5.4 Retail-Specific Components
 
-#### 4.4.1 Digital Retail Stack Integration
+#### 5.4.1 Digital Retail Stack Integration
 
 | System | Agent Use Cases | Integration Pattern |
 |--------|-----------------|---------------------|
@@ -808,7 +1068,7 @@ Enterprise Tenant                    Retail Tenant
 | **Customer Data Platform** | Customer profiles, preferences, history | Read-only with PII masking |
 | **Digital Retail Offers** | Promotion rules, pricing, campaigns | Read-only with caching |
 
-#### 4.4.2 Model Context Protocol (MCP)
+#### 5.4.2 Model Context Protocol (MCP)
 
 **Role:** Provides agents with shared, enterprise-grade understanding of products, inventory, pricing, policies, and customer intent.
 
@@ -819,9 +1079,9 @@ Enterprise Tenant                    Retail Tenant
 
 ---
 
-## 5. Security Architecture & Risks
+## 6. Security Architecture & Risks
 
-### 5.1 Zero Trust Principles for Agents
+### 6.1 Zero Trust Principles for Agents
 
 | Principle | Application to Agents |
 |-----------|----------------------|
@@ -829,7 +1089,7 @@ Enterprise Tenant                    Retail Tenant
 | **Least Privilege** | Request minimum API scopes; use delegated permissions where possible; scope data access to job function |
 | **Assume Breach** | Segment agent networks; encrypt data in transit and at rest; monitor for anomalies; plan for incident response |
 
-### 5.2 Identity Security
+### 6.2 Identity Security
 
 #### 5.2.1 Authentication Flows
 
@@ -853,7 +1113,7 @@ Enterprise Tenant                    Retail Tenant
 - Restrict accessible applications
 - Enforce security requirements
 
-### 5.3 Data Security
+### 6.3 Data Security
 
 #### 5.3.1 Data Classification
 
@@ -870,7 +1130,7 @@ Enterprise Tenant                    Retail Tenant
 - **Sensitivity Labels:** Agents inherit label restrictions from source content
 - **Prompt Guardrails:** Content filtering on agent inputs/outputs
 
-### 5.4 Network Security
+### 6.4 Network Security
 
 #### 5.4.1 Architecture Pattern
 
@@ -909,7 +1169,7 @@ Internet
 - Maintain separate VNets per tenant
 - Use Azure Firewall for egress control
 
-### 5.5 Secrets Management
+### 6.5 Secrets Management
 
 | Secret Type | Storage | Rotation | Access |
 |-------------|---------|----------|--------|
@@ -918,7 +1178,7 @@ Internet
 | Connection Strings | Key Vault Reference | Per deployment | App Configuration |
 | OAuth Tokens | Runtime memory only | Per request | Not persisted |
 
-### 5.6 Security Risks & Mitigations
+### 6.6 Security Risks & Mitigations
 
 | Risk | Impact | Mitigation |
 |------|--------|------------|
@@ -931,9 +1191,9 @@ Internet
 
 ---
 
-## 6. Operational Model
+## 7. Operational Model
 
-### 6.1 Agent Lifecycle
+### 7.1 Agent Lifecycle
 
 ```
 ┌──────────┐    ┌──────────┐    ┌──────────┐    ┌──────────┐    ┌──────────┐
@@ -945,7 +1205,7 @@ Internet
 └──────────┘    └──────────┘
 ```
 
-### 6.2 Environment Strategy (Zoned Governance)
+### 7.2 Environment Strategy (Zoned Governance)
 
 | Zone | Purpose | Governance | Data Access | Approval |
 |------|---------|------------|-------------|----------|
@@ -953,7 +1213,34 @@ Internet
 | **Supported Zone** | Departmental use | Standard | Departmental data | Team approval |
 | **IT-Managed Zone** | Production | Full | Enterprise data | CAB approval |
 
-### 6.3 DevSecOps Pipeline
+#### Agent 365 Integration with Zoned Governance
+
+With Agent 365 GA (May 1, 2026), Conditional Access for agents can **technically enforce** zone boundaries:
+
+| Zone | Agent 365 Conditional Access Policy | Enforcement |
+|------|-------------------------------------|-------------|
+| **Safe Zone** | `Report-only` mode; no blocking | Visibility without disruption |
+| **Supported Zone** | Require approved blueprint; block high-risk agents | Automated enforcement |
+| **IT-Managed Zone** | Require approved blueprint + custom attribute `zone=production` + low agent risk | Full policy enforcement |
+
+**Configuration Example:**
+```
+Conditional Access Policy: "IT-Managed Zone Enforcement"
+├── Applies to: All agent identities
+├── Target resources: Production apps (tagged with "env:production")
+├── Conditions:
+│   ├── Agent risk: High or Medium → Block
+│   └── Custom attribute: zone ≠ production → Block
+└── Grant: Allow if conditions pass
+```
+
+**Benefits over Custom Governance:**
+- **Automatic enforcement** at token acquisition (vs. manual approval gates)
+- **Risk-based blocking** using ID Protection signals
+- **Audit trail** in Entra sign-in logs (vs. custom logging)
+- **Consistent policy** across all agents (vs. per-agent custom rules)
+
+### 7.3 DevSecOps Pipeline
 
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
@@ -987,7 +1274,7 @@ Internet
 5. **Stage:** Deploy to staging environment, UAT validation
 6. **Production:** Canary or blue-green deployment, feature flags
 
-### 6.4 Monitoring & Observability
+### 7.4 Monitoring & Observability
 
 | Layer | Tool | Metrics |
 |-------|------|---------|
@@ -997,7 +1284,7 @@ Internet
 | **Audit** | Microsoft Purview | Data access, admin actions, policy violations |
 | **Cross-Tenant** | Azure Sentinel (centralized) | Correlated security events across tenants |
 
-### 6.5 Incident Response
+### 7.5 Incident Response
 
 **Agent-Specific Incident Types:**
 - Agent producing incorrect/harmful outputs
@@ -1016,11 +1303,11 @@ Internet
 
 ---
 
-## 7. Team Structure & RACI Matrix
+## 8. Team Structure & RACI Matrix
 
-### 7.1 Recommended Teams
+### 8.1 Recommended Teams
 
-#### 7.1.1 AI Engineering Team (Agent Builders)
+#### 8.1.1 AI Engineering Team (Agent Builders)
 
 **Mission:** Design, build, and maintain M365 agents that deliver business value while adhering to enterprise standards.
 
@@ -1055,7 +1342,7 @@ Internet
 
 ---
 
-#### 7.1.2 M365 Platform Engineering
+#### 8.1.2 M365 Platform Engineering
 
 **Mission:** Provide and maintain the M365 platform foundation that enables secure, compliant agent deployment.
 
@@ -1091,7 +1378,7 @@ Internet
 
 ---
 
-#### 7.1.3 Identity & Access Management (IAM)
+#### 8.1.3 Identity & Access Management (IAM)
 
 **Mission:** Ensure secure, compliant identity and access controls for all agents and their users across tenants.
 
@@ -1127,7 +1414,7 @@ Internet
 
 ---
 
-#### 7.1.4 Security / SecOps
+#### 8.1.4 Security / SecOps
 
 **Mission:** Protect the organization's agents, data, and users from security threats through proactive defense and rapid response.
 
@@ -1163,7 +1450,7 @@ Internet
 
 ---
 
-#### 7.1.5 Retail IT / Store Digital
+#### 8.1.5 Retail IT / Store Digital
 
 **Mission:** Enable store operations through technology while ensuring reliability, security, and alignment with retail business needs.
 
@@ -1199,7 +1486,7 @@ Internet
 
 ---
 
-#### 7.1.6 Enterprise Architecture
+#### 8.1.6 Enterprise Architecture
 
 **Mission:** Define and govern the enterprise architecture that ensures agents align with business strategy and technology standards.
 
@@ -1235,7 +1522,7 @@ Internet
 
 ---
 
-#### 7.1.7 Data Platforms
+#### 8.1.7 Data Platforms
 
 **Mission:** Provide the data infrastructure and governance that enables agents to access, process, and protect enterprise data.
 
@@ -1271,7 +1558,7 @@ Internet
 
 ---
 
-#### 7.1.8 AI Operations (AIOps)
+#### 8.1.8 AI Operations (AIOps)
 
 **Mission:** Ensure reliable, efficient, and compliant operation of all production agents through monitoring, optimization, and support.
 
@@ -1307,9 +1594,9 @@ Internet
 
 ---
 
-### 7.2 RACI Matrices
+### 8.2 RACI Matrices
 
-#### 7.2.1 Agent Creation
+#### 8.2.1 Agent Creation
 
 | Activity | AI Eng | M365 Platform | IAM | Security | Retail IT | EA | Data | AIOps |
 |----------|--------|---------------|-----|----------|-----------|----|----- |-------|
@@ -1319,7 +1606,7 @@ Internet
 | Security review | C | I | C | A | I | C | I | I |
 | Documentation | R | I | I | C | I | I | I | I |
 
-#### 7.2.2 Agent Deployment
+#### 8.2.2 Agent Deployment
 
 | Activity | AI Eng | M365 Platform | IAM | Security | Retail IT | EA | Data | AIOps |
 |----------|--------|---------------|-----|----------|-----------|----|----- |-------|
@@ -1330,7 +1617,7 @@ Internet
 | Production deployment | R | C | I | I | I | I | I | A |
 | Post-deployment validation | R | C | I | C | C | I | I | R |
 
-#### 7.2.3 Identity Setup
+#### 8.2.3 Identity Setup
 
 | Activity | AI Eng | M365 Platform | IAM | Security | Retail IT | EA | Data | AIOps |
 |----------|--------|---------------|-----|----------|-----------|----|----- |-------|
@@ -1340,7 +1627,7 @@ Internet
 | Conditional Access | I | C | R | A | I | I | I | I |
 | Service principal mgmt | C | C | R | C | I | I | I | I |
 
-#### 7.2.4 Secrets Handling
+#### 8.2.4 Secrets Handling
 
 | Activity | AI Eng | M365 Platform | IAM | Security | Retail IT | EA | Data | AIOps |
 |----------|--------|---------------|-----|----------|-----------|----|----- |-------|
@@ -1350,7 +1637,7 @@ Internet
 | Rotation automation | C | R | C | A | I | I | I | C |
 | Audit and monitoring | I | C | C | R | I | I | I | C |
 
-#### 7.2.5 Security Validation
+#### 8.2.5 Security Validation
 
 | Activity | AI Eng | M365 Platform | IAM | Security | Retail IT | EA | Data | AIOps |
 |----------|--------|---------------|-----|----------|-----------|----|----- |-------|
@@ -1360,7 +1647,7 @@ Internet
 | Compliance review | C | C | C | R | C | C | C | I |
 | Risk acceptance | I | I | I | A | I | C | I | I |
 
-#### 7.2.6 Monitoring & Incident Handling
+#### 8.2.6 Monitoring & Incident Handling
 
 | Activity | AI Eng | M365 Platform | IAM | Security | Retail IT | EA | Data | AIOps |
 |----------|--------|---------------|-----|----------|-----------|----|----- |-------|
@@ -1371,7 +1658,7 @@ Internet
 | Root cause analysis | R | C | C | C | C | I | C | C |
 | Incident resolution | R | C | C | C | C | I | C | A |
 
-#### 7.2.7 Upgrades and Breaking Changes
+#### 8.2.7 Upgrades and Breaking Changes
 
 | Activity | AI Eng | M365 Platform | IAM | Security | Retail IT | EA | Data | AIOps |
 |----------|--------|---------------|-----|----------|-----------|----|----- |-------|
@@ -1382,7 +1669,7 @@ Internet
 | Change approval | C | C | C | C | C | A | I | C |
 | Deployment execution | R | C | I | I | I | I | I | A |
 
-#### 7.2.8 Decommissioning Agents
+#### 8.2.8 Decommissioning Agents
 
 | Activity | AI Eng | M365 Platform | IAM | Security | Retail IT | EA | Data | AIOps |
 |----------|--------|---------------|-----|----------|-----------|----|----- |-------|
@@ -1397,9 +1684,9 @@ Internet
 
 ---
 
-## 8. Anti-Patterns and Common Risks
+## 9. Anti-Patterns and Common Risks
 
-### 8.1 Governance Anti-Patterns
+### 9.1 Governance Anti-Patterns
 
 | Anti-Pattern | Risk | Mitigation |
 |--------------|------|------------|
@@ -1409,7 +1696,7 @@ Internet
 | **One-size-fits-all governance** | Over-restricts simple agents or under-governs critical ones | Tier agents by risk; differentiated controls |
 | **Shadow agents** | Teams bypass governance to ship faster | Make governance enabling, not blocking; provide templates |
 
-### 8.2 Security Anti-Patterns
+### 9.2 Security Anti-Patterns
 
 | Anti-Pattern | Risk | Mitigation |
 |--------------|------|------------|
@@ -1419,7 +1706,7 @@ Internet
 | **Trust without verification** | Cross-tenant access assumed safe | Zero trust; explicit trust configuration; continuous monitoring |
 | **Audit logging as afterthought** | Can't investigate incidents or prove compliance | Design logging from start; centralize across tenants |
 
-### 8.3 Operational Anti-Patterns
+### 9.3 Operational Anti-Patterns
 
 | Anti-Pattern | Risk | Mitigation |
 |--------------|------|------------|
@@ -1429,7 +1716,7 @@ Internet
 | **Cost governance ignored** | Runaway token/API costs | Usage monitoring; alerts on thresholds; chargebacks |
 | **Knowledge silos** | One person knows how agent works | Documentation requirements; cross-training |
 
-### 8.4 Multi-Tenant Anti-Patterns
+### 9.4 Multi-Tenant Anti-Patterns
 
 | Anti-Pattern | Risk | Mitigation |
 |--------------|------|------------|
@@ -1440,7 +1727,7 @@ Internet
 
 ---
 
-### 8.5 Root Cause Analysis & Remediation Playbooks
+### 9.5 Root Cause Analysis & Remediation Playbooks
 
 #### Anti-Pattern: Oversharing Exposure in Copilot
 
@@ -1556,24 +1843,34 @@ Internet
 
 ---
 
-## 9. Glossary & Terminology
+## 10. Glossary & Terminology
 
 | Term | Definition |
 |------|------------|
 | **Agent** | An AI-powered application that can understand context, take actions, and interact with users or systems autonomously within defined boundaries |
+| **Agent 365** | Microsoft's native control plane for AI agents (GA May 1, 2026) providing observe, govern, and secure capabilities at enterprise scale |
+| **Agent Blueprint** | Logical definition of an agent type in Entra Agent ID; template for creating agent instances across tenants |
+| **Agent Identity** | First-class identity construct in Entra Agent ID representing an instantiated agent; performs token acquisitions |
+| **Agent Identity Blueprint Principal** | Service principal representing an agent blueprint in a tenant; creates agent identities and agent users |
+| **Agent Registry** | Agent 365 inventory of all agents in an organization, including shadow agent discovery |
+| **Agent User** | Non-human user identity in Entra Agent ID for agent experiences requiring user account context |
 | **B2B Collaboration** | Microsoft Entra feature enabling users from one tenant to access resources in another as guest users |
 | **CAB** | Change Advisory Board — governance body approving production changes |
 | **Conditional Access** | Policy-based access control in Entra ID based on signals like user, device, location, risk |
+| **Conditional Access for Agents** | Agent 365 capability extending Conditional Access evaluation and enforcement to agent identities |
 | **CoE** | Center of Excellence — centralized team providing standards, guidance, and shared services |
 | **Copilot Studio** | Microsoft's low-code platform for building AI agents |
 | **Cross-Tenant Access Settings** | Entra ID configuration controlling B2B collaboration between specific tenants |
 | **Cross-Tenant Synchronization** | Automated provisioning of B2B users between trusted tenants |
 | **Declarative Agent** | Configuration-based agent running on M365 Copilot infrastructure |
 | **DLP** | Data Loss Prevention — policies preventing sensitive data exfiltration |
+| **Entra Agent ID** | Microsoft Entra capability providing first-class identity management for AI agents |
 | **Entra ID** | Microsoft's cloud identity and access management service (formerly Azure AD) |
 | **Enterprise Tenant** | The Entra ID tenant serving corporate/HQ functions |
 | **Federated Agent Mesh** | Architecture pattern with centralized governance and distributed agent execution |
 | **Grounding** | Process of augmenting agent responses with enterprise knowledge |
+| **ID Protection for Agents** | Agent 365 capability detecting risky agent behavior and enabling risk-based Conditional Access |
+| **M365 E7** | Microsoft 365 E7 bundle ($99/user/month) including E5, Copilot, Entra Suite, and Agent 365 |
 | **MCP** | Model Context Protocol — standardized protocol for agent-to-data communication |
 | **Managed Identity** | Azure feature providing automatic identity for Azure resources without credentials |
 | **MTO** | Multi-Tenant Organization — Entra ID feature simplifying collaboration across owned tenants |
@@ -1583,6 +1880,7 @@ Internet
 | **RAG** | Retrieval-Augmented Generation — grounding AI responses in retrieved documents |
 | **Retail Tenant** | The Entra ID tenant serving store operations and frontline workers |
 | **Service Principal** | Identity object in Entra ID representing an application |
+| **Shadow Agent** | Undiscovered or unregistered agent operating in an organization; detected by Agent 365 |
 | **Workload Identity Federation** | Technique enabling Azure resources to access external systems without secrets |
 | **XPIA** | Cross-Prompt Injection Attack — security vulnerability in conversational AI |
 | **Zero Trust** | Security model assuming no implicit trust; verify explicitly, least privilege, assume breach |
@@ -1594,6 +1892,8 @@ Internet
 
 | Version | Date | Author | Changes |
 |---------|------|--------|---------|
+| 2.1 | 2026-04-02 | Enterprise Architecture | Added Section 3: Microsoft Agent 365 as native control plane; Entra Agent ID identity architecture; Conditional Access for agents; updated section 7.2 with Agent 365 zone enforcement; pricing ($15/user, E7 $99/user) |
+| 2.0 | 2026-04-02 | Enterprise Architecture | Added failure modes, cost model, operational runbooks, root cause playbooks |
 | 1.0 | 2026-03-24 | Enterprise Architecture | Initial release |
 
 ---
