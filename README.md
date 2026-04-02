@@ -8,17 +8,44 @@ This repository provides enterprise architects, security teams, and transformati
 
 ## Contents
 
-### Documentation
+### Core Documentation
 
-- **[M365-AGENTS-ARCHITECTURE.md](M365-AGENTS-ARCHITECTURE.md)** — Main architecture document (~47KB)
+- **[M365-AGENTS-ARCHITECTURE.md](M365-AGENTS-ARCHITECTURE.md)** — Main architecture document (~60KB)
   - Executive Summary & Strategic Context
   - Reference Architectures (Corporate-only, Dual-tenant, Federated mesh)
+  - **NEW:** Architecture Decision Criteria & Decision Tree
+  - **NEW:** Failure Modes & Remediation per Pattern
+  - **NEW:** Cost Model & Copilot Credits Implications
+  - **NEW:** Operational Runbooks (Deployment, Certificate Rotation, Incident Response, Cost Anomaly)
   - Detailed Component Descriptions
   - Security Architecture & Zero Trust Implementation
   - Operational Model & DevSecOps Pipeline
   - Team Structure & RACI Matrices (8 teams, 8 workflows)
-  - Anti-Patterns and Common Risks
+  - Anti-Patterns with Root Cause Analysis & Remediation Playbooks
   - Glossary & Terminology
+
+### Organizational & Governance
+
+- **[ORG-GOVERNANCE.md](ORG-GOVERNANCE.md)** — Organizational model for franchise retail (~25KB)
+  - Hub-and-Spoke Governance Model
+  - Agent Center of Excellence (CoE) Structure
+  - Agent Lifecycle Ownership
+  - Franchise-Specific Governance & Data Sharing
+  - Cost Allocation Model
+  - Vendor & Partner Engagement
+  - EA Governance Integration (TOGAF/ArchiMate)
+  - Governance Bodies & Decision Rights Matrix
+  - Implementation Roadmap
+
+### AI Maturity Framework
+
+- **[AI-MATURITY-MODEL.md](AI-MATURITY-MODEL.md)** — Multi-dimensional maturity assessment (~30KB)
+  - Six Dimensions: Strategy, Data, Tooling, Skills, Governance, Culture
+  - Five Maturity Levels (Initial → Optimizing)
+  - Current-State Assessment Questions & Scoring
+  - Target-State Roadmap Templates
+  - Quarterly Scorecard & Heatmap Tracking
+  - Assessment Templates (Detailed Worksheet, Action Planning, Executive Summary)
 
 ### PlantUML Diagrams
 
@@ -31,6 +58,8 @@ Located in `/plantuml/`:
 | `03-identity-api-patterns.puml` | Authentication flows (OBO, Client Credentials, WIF) |
 | `04-operational-flow.puml` | Agent request processing sequence |
 | `05-cicd-pipeline.puml` | DevSecOps pipeline stages |
+| `06-coe-structure.puml` | Agent CoE organizational structure |
+| `07-ai-maturity-model.puml` | Six-dimension maturity framework |
 
 ### draw.io Diagrams
 
@@ -42,6 +71,8 @@ Located in `/diagrams/`:
 | `02-dual-tenant.drawio` | Dual-tenant deployment model |
 | `03-team-structure.drawio` | Governance structure & team interactions |
 | `04-security-architecture.drawio` | Zero trust security controls |
+| `05-governance-model.drawio` | Hub-and-spoke franchise governance |
+| `06-ai-maturity-heatmap.drawio` | Maturity assessment heatmap template |
 
 ## Key Architecture Patterns
 
@@ -99,11 +130,23 @@ Open `.drawio` files directly in:
 - draw.io Desktop (Windows/Mac/Linux)
 - VS Code with draw.io extension
 
+## Quick Start
+
+1. **Assess your maturity** — Use the assessment templates in [AI-MATURITY-MODEL.md](AI-MATURITY-MODEL.md)
+2. **Select architecture pattern** — Use the decision tree in Section 3.4 of [M365-AGENTS-ARCHITECTURE.md](M365-AGENTS-ARCHITECTURE.md)
+3. **Plan your CoE** — Follow the structure in [ORG-GOVERNANCE.md](ORG-GOVERNANCE.md)
+4. **Review failure modes** — Understand risks before deployment (Section 3.5)
+5. **Estimate costs** — Use the cost model in Section 3.6
+6. **Implement with runbooks** — Operational playbooks in Section 3.7
+
 ## License
 
 This work is provided as enterprise architecture guidance. Adapt freely to your organization's needs.
 
 ---
 
-**Version:** 1.0  
-**Date:** 2026-03-24
+**Version:** 2.0  
+**Date:** 2026-04-02  
+**Changelog:**
+- v2.0: Added ORG-GOVERNANCE.md, AI-MATURITY-MODEL.md, expanded failure modes, cost model, operational runbooks, new diagrams
+- v1.0: Initial architecture document

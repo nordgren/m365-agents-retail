@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" modified="2026-04-02T06:30:00.000Z" agent="M365 Agents Architecture" version="21.0.0" type="device">
+  <diagram name="Governance Operating Model" id="governance-model">
+    <mxGraphModel dx="1200" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        
+        <!-- Title -->
+        <mxCell id="title" value="Hub-and-Spoke Governance Model for Franchise Retail" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=18;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="400" y="20" width="400" height="30" as="geometry" />
+        </mxCell>
+        
+        <!-- Corporate Hub -->
+        <mxCell id="hub" value="CORPORATE HUB (CoE)" style="swimlane;fillColor=#4CAF50;strokeColor=#2E7D32;fontColor=#FFFFFF;fontStyle=1;fontSize=14" vertex="1" parent="1">
+          <mxGeometry x="440" y="80" width="320" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="hub-std" value="Standards &amp;&#xa;Patterns" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#81C784;strokeColor=#2E7D32" vertex="1" parent="hub">
+          <mxGeometry x="20" y="40" width="80" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="hub-sec" value="Security&#xa;Baseline" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#81C784;strokeColor=#2E7D32" vertex="1" parent="hub">
+          <mxGeometry x="120" y="40" width="80" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="hub-comp" value="Compliance&#xa;Framework" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#81C784;strokeColor=#2E7D32" vertex="1" parent="hub">
+          <mxGeometry x="220" y="40" width="80" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="hub-infra" value="Shared&#xa;Infrastructure" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#81C784;strokeColor=#2E7D32" vertex="1" parent="hub">
+          <mxGeometry x="20" y="110" width="80" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="hub-cross" value="Cross-Tenant&#xa;Integration" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#81C784;strokeColor=#2E7D32" vertex="1" parent="hub">
+          <mxGeometry x="120" y="110" width="80" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="hub-cost" value="Cost&#xa;Management" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#81C784;strokeColor=#2E7D32" vertex="1" parent="hub">
+          <mxGeometry x="220" y="110" width="80" height="50" as="geometry" />
+        </mxCell>
+        
+        <!-- Regional Spokes -->
+        <mxCell id="spoke-americas" value="AMERICAS&#xa;SPOKE" style="swimlane;fillColor=#2196F3;strokeColor=#1565C0;fontColor=#FFFFFF;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="80" y="400" width="200" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="am-champion" value="Regional Champion" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#64B5F6;strokeColor=#1565C0" vertex="1" parent="spoke-americas">
+          <mxGeometry x="20" y="40" width="160" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="am-franchise" value="Franchise Groups" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#90CAF9;strokeColor=#1565C0" vertex="1" parent="spoke-americas">
+          <mxGeometry x="20" y="90" width="160" height="40" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="spoke-emea" value="EMEA&#xa;SPOKE" style="swimlane;fillColor=#2196F3;strokeColor=#1565C0;fontColor=#FFFFFF;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="500" y="400" width="200" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="em-champion" value="Regional Champion" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#64B5F6;strokeColor=#1565C0" vertex="1" parent="spoke-emea">
+          <mxGeometry x="20" y="40" width="160" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="em-franchise" value="Franchise Groups" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#90CAF9;strokeColor=#1565C0" vertex="1" parent="spoke-emea">
+          <mxGeometry x="20" y="90" width="160" height="40" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="spoke-apac" value="APAC&#xa;SPOKE" style="swimlane;fillColor=#2196F3;strokeColor=#1565C0;fontColor=#FFFFFF;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="920" y="400" width="200" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="ap-champion" value="Regional Champion" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#64B5F6;strokeColor=#1565C0" vertex="1" parent="spoke-apac">
+          <mxGeometry x="20" y="40" width="160" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="ap-franchise" value="Franchise Groups" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#90CAF9;strokeColor=#1565C0" vertex="1" parent="spoke-apac">
+          <mxGeometry x="20" y="90" width="160" height="40" as="geometry" />
+        </mxCell>
+        
+        <!-- Connections -->
+        <mxCell id="conn1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#2E7D32;strokeWidth=2;endArrow=classic;endFill=1" edge="1" parent="1" source="hub" target="spoke-americas">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="conn2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#2E7D32;strokeWidth=2;endArrow=classic;endFill=1" edge="1" parent="1" source="hub" target="spoke-emea">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="conn3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#2E7D32;strokeWidth=2;endArrow=classic;endFill=1" edge="1" parent="1" source="hub" target="spoke-apac">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <!-- Governance Bodies -->
+        <mxCell id="gov-bodies" value="Governance Bodies" style="swimlane;fillColor=#ECEFF1;strokeColor=#607D8B;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="80" y="620" width="1040" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="gov-exec" value="Executive&#xa;Steering" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#B0BEC5;strokeColor=#607D8B" vertex="1" parent="gov-bodies">
+          <mxGeometry x="20" y="30" width="100" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="gov-board" value="Agent&#xa;Governance Board" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#B0BEC5;strokeColor=#607D8B" vertex="1" parent="gov-bodies">
+          <mxGeometry x="140" y="30" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="gov-tech" value="Technical&#xa;Review Board" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#B0BEC5;strokeColor=#607D8B" vertex="1" parent="gov-bodies">
+          <mxGeometry x="280" y="30" width="100" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="gov-sec" value="Security&#xa;Council" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#B0BEC5;strokeColor=#607D8B" vertex="1" parent="gov-bodies">
+          <mxGeometry x="400" y="30" width="100" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="gov-fran" value="Franchise&#xa;Council" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#B0BEC5;strokeColor=#607D8B" vertex="1" parent="gov-bodies">
+          <mxGeometry x="520" y="30" width="100" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="gov-freq" value="Quarterly | Monthly | Weekly | Bi-weekly | Monthly" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=9" vertex="1" parent="gov-bodies">
+          <mxGeometry x="640" y="35" width="380" height="30" as="geometry" />
+        </mxCell>
+        
+        <!-- Agent Tiers -->
+        <mxCell id="tiers" value="Agent Tier Governance" style="swimlane;fillColor=#FFF9C4;strokeColor=#F9A825;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="800" y="80" width="300" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="tier1" value="Tier 1: Personal" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF59D;strokeColor=#F9A825" vertex="1" parent="tiers">
+          <mxGeometry x="20" y="35" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="tier1-gov" value="Self-service" style="text;html=1;strokeColor=none;fillColor=none;fontSize=9" vertex="1" parent="tiers">
+          <mxGeometry x="150" y="35" width="130" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="tier2" value="Tier 2: Department" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFEE58;strokeColor=#F9A825" vertex="1" parent="tiers">
+          <mxGeometry x="20" y="75" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="tier2-gov" value="Team approval" style="text;html=1;strokeColor=none;fillColor=none;fontSize=9" vertex="1" parent="tiers">
+          <mxGeometry x="150" y="75" width="130" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="tier3" value="Tier 3: Cross-Func" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFCA28;strokeColor=#F9A825" vertex="1" parent="tiers">
+          <mxGeometry x="20" y="115" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="tier3-gov" value="CoE review" style="text;html=1;strokeColor=none;fillColor=none;fontSize=9" vertex="1" parent="tiers">
+          <mxGeometry x="150" y="115" width="130" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="tier4" value="Tier 4: Enterprise" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFA000;strokeColor=#F9A825;fontColor=#FFFFFF" vertex="1" parent="tiers">
+          <mxGeometry x="20" y="155" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="tier4-gov" value="CAB + Security" style="text;html=1;strokeColor=none;fillColor=none;fontSize=9" vertex="1" parent="tiers">
+          <mxGeometry x="150" y="155" width="130" height="30" as="geometry" />
+        </mxCell>
+        
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

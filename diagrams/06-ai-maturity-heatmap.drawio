@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" modified="2026-04-02T06:30:00.000Z" agent="M365 Agents Architecture" version="21.0.0" type="device">
+  <diagram name="AI Maturity Heatmap" id="maturity-heatmap">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="700" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        
+        <!-- Title -->
+        <mxCell id="title" value="AI Maturity Assessment Heatmap Template" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=18;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="300" y="20" width="400" height="30" as="geometry" />
+        </mxCell>
+        
+        <!-- Heatmap Grid -->
+        <mxCell id="grid" value="" style="swimlane;fillColor=#FAFAFA;strokeColor=#9E9E9E" vertex="1" parent="1">
+          <mxGeometry x="80" y="70" width="700" height="400" as="geometry" />
+        </mxCell>
+        
+        <!-- Column Headers -->
+        <mxCell id="col-l1" value="L1&#xa;Initial" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ECEFF1;strokeColor=#9E9E9E;fontStyle=1" vertex="1" parent="grid">
+          <mxGeometry x="120" y="10" width="100" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="col-l2" value="L2&#xa;Developing" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ECEFF1;strokeColor=#9E9E9E;fontStyle=1" vertex="1" parent="grid">
+          <mxGeometry x="220" y="10" width="100" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="col-l3" value="L3&#xa;Defined" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ECEFF1;strokeColor=#9E9E9E;fontStyle=1" vertex="1" parent="grid">
+          <mxGeometry x="320" y="10" width="100" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="col-l4" value="L4&#xa;Managed" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ECEFF1;strokeColor=#9E9E9E;fontStyle=1" vertex="1" parent="grid">
+          <mxGeometry x="420" y="10" width="100" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="col-l5" value="L5&#xa;Optimizing" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ECEFF1;strokeColor=#9E9E9E;fontStyle=1" vertex="1" parent="grid">
+          <mxGeometry x="520" y="10" width="100" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="col-score" value="Score" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ECEFF1;strokeColor=#9E9E9E;fontStyle=1" vertex="1" parent="grid">
+          <mxGeometry x="630" y="10" width="60" height="40" as="geometry" />
+        </mxCell>
+        
+        <!-- Row: Strategy -->
+        <mxCell id="row-strat" value="Strategy" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E3F2FD;strokeColor=#1565C0;fontStyle=1;align=left;spacingLeft=10" vertex="1" parent="grid">
+          <mxGeometry x="10" y="60" width="100" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="strat-l1" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#9E9E9E" vertex="1" parent="grid">
+          <mxGeometry x="120" y="60" width="100" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="strat-l2" value="●" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFEB3B;strokeColor=#9E9E9E;fontSize=24" vertex="1" parent="grid">
+          <mxGeometry x="220" y="60" width="100" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="strat-l3" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#9E9E9E" vertex="1" parent="grid">
+          <mxGeometry x="320" y="60" width="100" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="strat-l4" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#9E9E9E" vertex="1" parent="grid">
+          <mxGeometry x="420" y="60" width="100" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="strat-l5" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#9E9E9E" vertex="1" parent="grid">
+          <mxGeometry x="520" y="60" width="100" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="strat-score" value="2.3" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFEB3B;strokeColor=#9E9E9E;fontStyle=1" vertex="1" parent="grid">
+          <mxGeometry x="630" y="60" width="60" height="50" as="geometry" />
+        </mxCell>
+        
+        <!-- Row: Data -->
+        <mxCell id="row-data" value="Data" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFF3E0;strokeColor=#E65100;fontStyle=1;align=left;spacingLeft=10" vertex="1" parent="grid">
+          <mxGeometry x="10" y="115" width="100" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="data-l1" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#9E9E9E" vertex="1" parent="grid">
+          <mxGeometry x="120" y="115" width="100" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="data-l2" value="●" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFEB3B;strokeColor=#9E9E9E;fontSize=24" vertex="1" parent="grid">
+          <mxGeometry x="220" y="115" width="100" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="data-l3" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#9E9E9E" vertex="1" parent="grid">
+          <mxGeometry x="320" y="115" width="100" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="data-l4" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#9E9E9E" vertex="1" parent="grid">
+          <mxGeometry x="420" y="115" width="100" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="data-l5" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#9E9E9E" vertex="1" parent="grid">
+          <mxGeometry x="520" y="115" width="100" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="data-score" value="2.1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFEB3B;strokeColor=#9E9E9E;fontStyle=1" vertex="1" parent="grid">
+          <mxGeometry x="630" y="115" width="60" height="50" as="geometry" />
+        </mxCell>
+        
+        <!-- Row: Tooling -->
+        <mxCell id="row-tool" value="Tooling" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E8F5E9;strokeColor=#2E7D32;fontStyle=1;align=left;spacingLeft=10" vertex="1" parent="grid">
+          <mxGeometry x="10" y="170" width="100" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="tool-l1" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#9E9E9E" vertex="1" parent="grid">
+          <mxGeometry x="120" y="170" width="100" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="tool-l2" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#9E9E9E" vertex="1" parent="grid">
+          <mxGeometry x="220" y="170" width="100" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="tool-l3" value="●" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#8BC34A;strokeColor=#9E9E9E;fontSize=24" vertex="1" parent="grid">
+          <mxGeometry x="320" y="170" width="100" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="tool-l4" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#9E9E9E" vertex="1" parent="grid">
+          <mxGeometry x="420" y="170" width="100" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="tool-l5" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#9E9E9E" vertex="1" parent="grid">
+          <mxGeometry x="520" y="170" width="100" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="tool-score" value="2.8" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#8BC34A;strokeColor=#9E9E9E;fontStyle=1" vertex="1" parent="grid">
+          <mxGeometry x="630" y="170" width="60" height="50" as="geometry" />
+        </mxCell>
+        
+        <!-- Row: Skills -->
+        <mxCell id="row-skill" value="Skills" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FCE4EC;strokeColor=#AD1457;fontStyle=1;align=left;spacingLeft=10" vertex="1" parent="grid">
+          <mxGeometry x="10" y="225" width="100" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="skill-l1" value="●" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FF5722;strokeColor=#9E9E9E;fontSize=24;fontColor=#FFFFFF" vertex="1" parent="grid">
+          <mxGeometry x="120" y="225" width="100" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="skill-l2" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#9E9E9E" vertex="1" parent="grid">
+          <mxGeometry x="220" y="225" width="100" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="skill-l3" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#9E9E9E" vertex="1" parent="grid">
+          <mxGeometry x="320" y="225" width="100" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="skill-l4" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#9E9E9E" vertex="1" parent="grid">
+          <mxGeometry x="420" y="225" width="100" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="skill-l5" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#9E9E9E" vertex="1" parent="grid">
+          <mxGeometry x="520" y="225" width="100" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="skill-score" value="1.5" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FF5722;strokeColor=#9E9E9E;fontStyle=1;fontColor=#FFFFFF" vertex="1" parent="grid">
+          <mxGeometry x="630" y="225" width="60" height="50" as="geometry" />
+        </mxCell>
+        
+        <!-- Row: Governance -->
+        <mxCell id="row-gov" value="Governance" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F3E5F5;strokeColor=#7B1FA2;fontStyle=1;align=left;spacingLeft=10" vertex="1" parent="grid">
+          <mxGeometry x="10" y="280" width="100" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="gov-l1" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#9E9E9E" vertex="1" parent="grid">
+          <mxGeometry x="120" y="280" width="100" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="gov-l2" value="●" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFEB3B;strokeColor=#9E9E9E;fontSize=24" vertex="1" parent="grid">
+          <mxGeometry x="220" y="280" width="100" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="gov-l3" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#9E9E9E" vertex="1" parent="grid">
+          <mxGeometry x="320" y="280" width="100" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="gov-l4" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#9E9E9E" vertex="1" parent="grid">
+          <mxGeometry x="420" y="280" width="100" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="gov-l5" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#9E9E9E" vertex="1" parent="grid">
+          <mxGeometry x="520" y="280" width="100" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="gov-score" value="2.0" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFEB3B;strokeColor=#9E9E9E;fontStyle=1" vertex="1" parent="grid">
+          <mxGeometry x="630" y="280" width="60" height="50" as="geometry" />
+        </mxCell>
+        
+        <!-- Row: Culture -->
+        <mxCell id="row-cult" value="Culture" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFEBEE;strokeColor=#C62828;fontStyle=1;align=left;spacingLeft=10" vertex="1" parent="grid">
+          <mxGeometry x="10" y="335" width="100" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="cult-l1" value="●" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FF5722;strokeColor=#9E9E9E;fontSize=24;fontColor=#FFFFFF" vertex="1" parent="grid">
+          <mxGeometry x="120" y="335" width="100" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="cult-l2" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#9E9E9E" vertex="1" parent="grid">
+          <mxGeometry x="220" y="335" width="100" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="cult-l3" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#9E9E9E" vertex="1" parent="grid">
+          <mxGeometry x="320" y="335" width="100" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="cult-l4" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#9E9E9E" vertex="1" parent="grid">
+          <mxGeometry x="420" y="335" width="100" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="cult-l5" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#9E9E9E" vertex="1" parent="grid">
+          <mxGeometry x="520" y="335" width="100" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="cult-score" value="1.8" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FF5722;strokeColor=#9E9E9E;fontStyle=1;fontColor=#FFFFFF" vertex="1" parent="grid">
+          <mxGeometry x="630" y="335" width="60" height="50" as="geometry" />
+        </mxCell>
+        
+        <!-- Legend -->
+        <mxCell id="legend" value="Color Legend" style="swimlane;fillColor=#FAFAFA;strokeColor=#9E9E9E" vertex="1" parent="1">
+          <mxGeometry x="820" y="70" width="220" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="leg-red" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FF5722;strokeColor=#9E9E9E" vertex="1" parent="legend">
+          <mxGeometry x="20" y="35" width="30" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="leg-red-txt" value="L1 (Initial) - Urgent attention" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=10" vertex="1" parent="legend">
+          <mxGeometry x="60" y="35" width="150" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="leg-yel" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFEB3B;strokeColor=#9E9E9E" vertex="1" parent="legend">
+          <mxGeometry x="20" y="60" width="30" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="leg-yel-txt" value="L2 (Developing) - In progress" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=10" vertex="1" parent="legend">
+          <mxGeometry x="60" y="60" width="150" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="leg-grn" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#8BC34A;strokeColor=#9E9E9E" vertex="1" parent="legend">
+          <mxGeometry x="20" y="85" width="30" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="leg-grn-txt" value="L3+ (Defined+) - On track" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=10" vertex="1" parent="legend">
+          <mxGeometry x="60" y="85" width="150" height="20" as="geometry" />
+        </mxCell>
+        
+        <!-- Summary -->
+        <mxCell id="summary" value="Assessment Summary" style="swimlane;fillColor=#FAFAFA;strokeColor=#9E9E9E;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="820" y="210" width="220" height="260" as="geometry" />
+        </mxCell>
+        <mxCell id="sum-overall" value="Overall Maturity: L1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FF5722;strokeColor=#C62828;fontStyle=1;fontColor=#FFFFFF;fontSize=12" vertex="1" parent="summary">
+          <mxGeometry x="20" y="35" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="sum-note" value="(Weakest link: Skills, Culture)" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontSize=9" vertex="1" parent="summary">
+          <mxGeometry x="20" y="80" width="180" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="sum-priority" value="Priority Focus Areas:&#xa;&#xa;1. Skills training program&#xa;2. Change management&#xa;3. Governance framework" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=10;whiteSpace=wrap" vertex="1" parent="summary">
+          <mxGeometry x="20" y="110" width="180" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="sum-target" value="Target: L3 across all&#xa;dimensions within 12 months" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E8F5E9;strokeColor=#2E7D32;fontSize=10" vertex="1" parent="summary">
+          <mxGeometry x="20" y="200" width="180" height="40" as="geometry" />
+        </mxCell>
+        
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

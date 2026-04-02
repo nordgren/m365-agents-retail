@@ -1,0 +1,97 @@
+@startuml AI Maturity Model Framework
+
+skinparam backgroundColor #FEFEFE
+skinparam defaultFontName Arial
+skinparam defaultFontSize 10
+
+title AI Maturity Model for M365 Agents - Six Dimensions
+
+rectangle "AI MATURITY FRAMEWORK" #FAFAFA {
+
+    together {
+        rectangle "STRATEGY" #E3F2FD {
+            card "L1: Ad hoc" as s1 #BBDEFB
+            card "L2: Pilot" as s2 #90CAF9
+            card "L3: Roadmap" as s3 #64B5F6
+            card "L4: Integrated" as s4 #42A5F5
+            card "L5: Strategic" as s5 #1E88E5
+            s1 -[hidden]> s2
+            s2 -[hidden]> s3
+            s3 -[hidden]> s4
+            s4 -[hidden]> s5
+        }
+        
+        rectangle "DATA" #FFF3E0 {
+            card "L1: Siloed" as d1 #FFE0B2
+            card "L2: Basic DLP" as d2 #FFCC80
+            card "L3: Governed" as d3 #FFB74D
+            card "L4: Automated" as d4 #FFA726
+            card "L5: AI-driven" as d5 #FB8C00
+            d1 -[hidden]> d2
+            d2 -[hidden]> d3
+            d3 -[hidden]> d4
+            d4 -[hidden]> d5
+        }
+    }
+    
+    together {
+        rectangle "TOOLING" #E8F5E9 {
+            card "L1: None" as t1 #C8E6C9
+            card "L2: Basic" as t2 #A5D6A7
+            card "L3: CI/CD" as t3 #81C784
+            card "L4: Automated" as t4 #66BB6A
+            card "L5: Self-service" as t5 #4CAF50
+            t1 -[hidden]> t2
+            t2 -[hidden]> t3
+            t3 -[hidden]> t4
+            t4 -[hidden]> t5
+        }
+        
+        rectangle "SKILLS" #FCE4EC {
+            card "L1: None" as k1 #F8BBD9
+            card "L2: Training" as k2 #F48FB1
+            card "L3: Certified" as k3 #F06292
+            card "L4: Tracked" as k4 #EC407A
+            card "L5: Leading" as k5 #E91E63
+            k1 -[hidden]> k2
+            k2 -[hidden]> k3
+            k3 -[hidden]> k4
+            k4 -[hidden]> k5
+        }
+    }
+    
+    together {
+        rectangle "GOVERNANCE" #F3E5F5 {
+            card "L1: None" as g1 #E1BEE7
+            card "L2: Basic" as g2 #CE93D8
+            card "L3: Tiered" as g3 #BA68C8
+            card "L4: Metrics" as g4 #AB47BC
+            card "L5: Adaptive" as g5 #9C27B0
+            g1 -[hidden]> g2
+            g2 -[hidden]> g3
+            g3 -[hidden]> g4
+            g4 -[hidden]> g5
+        }
+        
+        rectangle "CULTURE" #FFEBEE {
+            card "L1: Skeptical" as c1 #FFCDD2
+            card "L2: Curious" as c2 #EF9A9A
+            card "L3: Adopting" as c3 #E57373
+            card "L4: Integrated" as c4 #EF5350
+            card "L5: AI-first" as c5 #F44336
+            c1 -[hidden]> c2
+            c2 -[hidden]> c3
+            c3 -[hidden]> c4
+            c4 -[hidden]> c5
+        }
+    }
+}
+
+note bottom of "AI MATURITY FRAMEWORK"
+  **Overall Maturity = Lowest Dimension Score**
+  (Weakest link principle)
+  
+  L1: Initial | L2: Developing | L3: Defined | L4: Managed | L5: Optimizing
+end note
+
+@enduml

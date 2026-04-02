@@ -1,7 +1,7 @@
 # Enterprise Architecture for M365 Agents in Multi-Tenant Retail Environments
 
-**Version:** 1.0  
-**Date:** 2026-03-24  
+**Version:** 2.0  
+**Date:** 2026-04-02  
 **Classification:** Enterprise Architecture Proposal  
 **Scope:** Company-Agnostic, Enterprise-Grade
 
@@ -326,6 +326,331 @@ SharePoint / OneDrive / Dataverse
 - M&A scenarios with tenant consolidation roadmap
 - Regulatory requirements for data localization
 - Global retail operations with regional autonomy
+
+---
+
+### 3.4 Architecture Decision Criteria
+
+Use this decision matrix to select the appropriate reference architecture:
+
+| Factor | Pattern A (Corporate-Only) | Pattern B (Dual-Tenant) | Pattern C (Federated Mesh) |
+|--------|---------------------------|------------------------|---------------------------|
+| **Tenant Count** | 1 | 2 | 3+ |
+| **Complexity** | Low | Medium | High |
+| **Time to Deploy** | 2-4 weeks | 2-3 months | 6-12 months |
+| **Cost (Implementation)** | $ | $$ | $$$ |
+| **Cost (Operations)** | $ | $$ | $$$ |
+| **Skills Required** | M365 Admin | M365 + Identity Specialist | EA + Identity + Platform |
+| **Governance Overhead** | Low | Medium | High |
+| **Cross-Tenant Data** | N/A | Controlled | Orchestrated |
+| **Best For** | Pilots, corporate-only | Corporate-retail integration | Global enterprises |
+
+#### Decision Tree
+
+```
+                    ┌─────────────────────────────┐
+                    │ How many Entra ID tenants?  │
+                    └──────────────┬──────────────┘
+                                   │
+              ┌────────────────────┼────────────────────┐
+              │                    │                    │
+           1 tenant            2 tenants            3+ tenants
+              │                    │                    │
+              ▼                    ▼                    ▼
+      ┌───────────────┐    ┌───────────────┐    ┌───────────────┐
+      │   Pattern A   │    │ Need cross-   │    │   Pattern C   │
+      │ Corporate-Only│    │ tenant data?  │    │Federated Mesh │
+      └───────────────┘    └───────┬───────┘    └───────────────┘
+                                   │
+                        ┌──────────┴──────────┐
+                        │                     │
+                       Yes                   No
+                        │                     │
+                        ▼                     ▼
+                ┌───────────────┐     ┌───────────────┐
+                │   Pattern B   │     │   Pattern A   │
+                │  Dual-Tenant  │     │  per tenant   │
+                └───────────────┘     └───────────────┘
+```
+
+---
+
+### 3.5 Failure Modes & Remediation
+
+#### Pattern A: Corporate-Only Failure Modes
+
+| Failure Mode | Root Cause | Impact | Detection | Remediation |
+|--------------|------------|--------|-----------|-------------|
+| **Oversharing exposure** | Inadequate SharePoint permissions | Sensitive data in Copilot responses | Purview alerts; user reports | Implement DLP; remediate permissions |
+| **Agent unavailable** | Copilot service outage | Business process disruption | M365 Service Health; synthetic monitoring | Failover to manual process; incident comms |
+| **Performance degradation** | Token limit exceeded; slow API plugins | Poor user experience | Response time monitoring | Optimize grounding; cache API responses |
+| **Data staleness** | Knowledge source not updated | Incorrect agent responses | User feedback; accuracy metrics | Automate refresh; alert on staleness |
+| **Permission creep** | Over-provisioned API permissions | Security risk; compliance violation | Quarterly access review | Implement least privilege; PIM |
+
+#### Pattern B: Dual-Tenant Failure Modes
+
+| Failure Mode | Root Cause | Impact | Detection | Remediation |
+|--------------|------------|--------|-----------|-------------|
+| **Cross-tenant auth failure** | Expired certificates; consent revoked | Cross-tenant agents non-functional | Auth error monitoring; synthetic tests | Rotate certificates; re-consent |
+| **Tenant trust drift** | Cross-tenant settings changed | Unexpected access denial/grant | Config change alerts; periodic audit | Version control settings; change process |
+| **Data leakage** | Cross-tenant oversharing | Compliance violation; data breach | DLP alerts; audit log correlation | Immediate access revocation; incident response |
+| **Latency spikes** | Cross-tenant network issues | Poor user experience | End-to-end latency monitoring | Private endpoints; geographic optimization |
+| **Consent sprawl** | Unmanaged multi-tenant app consents | Security risk | Consent inventory review | Consent governance process |
+
+#### Pattern C: Federated Mesh Failure Modes
+
+| Failure Mode | Root Cause | Impact | Detection | Remediation |
+|--------------|------------|--------|-----------|-------------|
+| **Governance layer outage** | Central infrastructure failure | No policy enforcement | Health monitoring; redundancy | Active-passive failover; DR plan |
+| **Policy sync failure** | Distribution mechanism broken | Stale policies in tenants | Policy version tracking | Manual policy push; sync repair |
+| **Cross-tenant cascade** | Failure propagates across tenants | Multi-tenant outage | Correlation analysis | Circuit breakers; tenant isolation |
+| **Registry inconsistency** | Agent registry out of sync | Ghost agents; missing agents | Reconciliation checks | Automated sync; manual cleanup |
+| **Cost explosion** | Uncontrolled agent proliferation | Budget overrun | Cost monitoring; alerts | Quotas; chargeback; cleanup |
+
+---
+
+### 3.6 Cost Model & Implications
+
+#### Cost Categories
+
+| Category | Components | Billing Model |
+|----------|------------|---------------|
+| **M365 Copilot Licensing** | Per-user license ($30/user/month typical) | Per user, annual |
+| **Copilot Studio Consumption** | Copilot Credits for agent interactions | Pay-as-you-go or prepaid packs |
+| **Azure Infrastructure** | Key Vault, API Management, Functions | Consumption-based |
+| **Development** | CoE team, development resources | FTE / contractor |
+| **Operations** | Monitoring, support, maintenance | FTE / MSP |
+
+#### Copilot Credit Consumption Reference
+
+| Agent Feature | Credits/Interaction | Typical Volume | Monthly Credits |
+|---------------|--------------------|--------------------|-----------------|
+| Classic answer | 1 | 10,000 | 10,000 |
+| Generative answer | 2 | 5,000 | 10,000 |
+| Agent action | 5 | 3,000 | 15,000 |
+| Tenant graph grounding | 10 | 2,000 | 20,000 |
+| Generative + graph | 12 | 2,000 | 24,000 |
+
+*Note: Copilot Credits for M365 Copilot-licensed users in B2E scenarios are included in license (fair use limits apply).*
+
+#### Cost by Architecture Pattern
+
+| Cost Element | Pattern A | Pattern B | Pattern C |
+|--------------|-----------|-----------|-----------|
+| **Implementation (one-time)** | $50-150K | $200-500K | $500K-2M |
+| **CoE Team (annual)** | 3-5 FTEs | 8-12 FTEs | 15-25 FTEs |
+| **Infrastructure (annual)** | $20-50K | $100-300K | $300K-1M |
+| **Copilot Licenses** | Per user | Per user both tenants | Per user all tenants |
+| **Copilot Credits** | Moderate | Higher (cross-tenant) | Highest (mesh overhead) |
+
+#### Cost Optimization Strategies
+
+1. **Right-size agent features:** Use classic answers where generative not needed
+2. **Optimize grounding:** Limit knowledge sources; tune retrieval
+3. **Cache API responses:** Reduce external API calls
+4. **Chargeback model:** Allocate costs to consuming business units
+5. **Consumption monitoring:** Alert on anomalies; enforce quotas
+6. **License optimization:** Review Copilot license utilization quarterly
+
+---
+
+### 3.7 Operational Runbooks
+
+#### Runbook 1: Agent Deployment
+
+**Trigger:** New agent ready for production deployment
+
+**Prerequisites:**
+- [ ] Agent design approved (Tier 3+: CoE review complete)
+- [ ] Security assessment passed
+- [ ] CI/CD pipeline configured
+- [ ] Monitoring and alerting configured
+- [ ] Documentation complete
+- [ ] Rollback plan documented
+
+**Steps:**
+
+1. **Pre-Deployment Validation**
+   ```
+   ☐ Verify all prerequisites complete
+   ☐ Confirm deployment window with stakeholders
+   ☐ Validate target environment health
+   ☐ Backup current state (if upgrade)
+   ```
+
+2. **Deployment Execution**
+   ```
+   ☐ Execute CI/CD pipeline (Stage → Production)
+   ☐ Monitor pipeline execution
+   ☐ Validate deployment artifacts
+   ```
+
+3. **Post-Deployment Validation**
+   ```
+   ☐ Execute smoke tests
+   ☐ Verify agent responds correctly
+   ☐ Confirm monitoring/alerting active
+   ☐ Test rollback capability (dry run)
+   ```
+
+4. **Go-Live Confirmation**
+   ```
+   ☐ Notify stakeholders of successful deployment
+   ☐ Update agent registry status
+   ☐ Archive deployment artifacts
+   ☐ Close deployment ticket
+   ```
+
+**Rollback Trigger:** Any critical failure in smoke tests
+
+**Rollback Steps:**
+```
+☐ Announce rollback decision
+☐ Execute rollback pipeline
+☐ Verify previous version restored
+☐ Notify stakeholders
+☐ Document rollback reason
+☐ Schedule post-mortem
+```
+
+---
+
+#### Runbook 2: Cross-Tenant Certificate Rotation
+
+**Trigger:** Certificate expiration approaching (30 days before)
+
+**Frequency:** Annual (or as defined by security policy)
+
+**Steps:**
+
+1. **Preparation (Week 1)**
+   ```
+   ☐ Generate new certificate in Key Vault (Enterprise Tenant)
+   ☐ Export public key for Retail Tenant registration
+   ☐ Schedule change window with both tenant admins
+   ☐ Notify affected teams
+   ```
+
+2. **Enterprise Tenant Update (Change Window)**
+   ```
+   ☐ Add new certificate to app registration (do not remove old)
+   ☐ Validate new certificate is available
+   ☐ Update agent configurations to use new certificate
+   ```
+
+3. **Retail Tenant Update (Change Window)**
+   ```
+   ☐ Update service principal with new certificate
+   ☐ Test cross-tenant authentication with new cert
+   ☐ Validate all agents functional
+   ```
+
+4. **Cleanup (Post-Validation)**
+   ```
+   ☐ Monitor for 7 days with both certificates active
+   ☐ Remove old certificate from app registration
+   ☐ Remove old certificate from Key Vault (after retention)
+   ☐ Update documentation with new expiration date
+   ☐ Schedule next rotation
+   ```
+
+---
+
+#### Runbook 3: Agent Incident Response
+
+**Trigger:** Agent incident reported or detected
+
+**Severity Levels:**
+
+| Severity | Definition | Response Time | Escalation |
+|----------|------------|---------------|------------|
+| **P1** | Agent producing harmful/incorrect critical outputs | 15 min | Security + CoE Director |
+| **P2** | Agent unavailable affecting business operations | 30 min | AI Operations Lead |
+| **P3** | Agent degraded performance or intermittent issues | 4 hours | AI Operations |
+| **P4** | Minor issues; cosmetic; workaround available | 24 hours | AI Operations |
+
+**P1/P2 Response Steps:**
+
+1. **Immediate Response (0-15 min)**
+   ```
+   ☐ Acknowledge incident
+   ☐ Assess severity and impact
+   ☐ If data exposure: Disable agent immediately
+   ☐ If availability: Check M365 Service Health
+   ☐ Notify incident commander
+   ```
+
+2. **Investigation (15-60 min)**
+   ```
+   ☐ Gather evidence (logs, user reports, screenshots)
+   ☐ Identify root cause category
+   ☐ Determine affected scope (users, data, tenants)
+   ☐ Engage SMEs as needed
+   ```
+
+3. **Containment (Concurrent)**
+   ```
+   ☐ Disable agent if risk continues
+   ☐ Revoke cross-tenant access if breach suspected
+   ☐ Preserve evidence for forensics
+   ☐ Communicate status to stakeholders
+   ```
+
+4. **Resolution**
+   ```
+   ☐ Implement fix or workaround
+   ☐ Test fix in non-production
+   ☐ Deploy fix with approval
+   ☐ Verify resolution
+   ☐ Re-enable agent (staged rollout)
+   ```
+
+5. **Post-Incident**
+   ```
+   ☐ Conduct post-mortem (within 72 hours)
+   ☐ Document root cause and remediation
+   ☐ Update runbooks if needed
+   ☐ Implement preventive measures
+   ☐ Close incident
+   ```
+
+---
+
+#### Runbook 4: Cost Anomaly Response
+
+**Trigger:** Cost monitoring alert (>20% deviation from baseline)
+
+**Steps:**
+
+1. **Detection & Triage**
+   ```
+   ☐ Review alert details (which agents, tenants, time period)
+   ☐ Identify consumption spike source
+   ☐ Determine if legitimate usage or anomaly
+   ```
+
+2. **Investigation**
+   ```
+   ☐ Analyze agent usage patterns
+   ☐ Review recent deployments/changes
+   ☐ Check for runaway processes or infinite loops
+   ☐ Identify responsible business unit
+   ```
+
+3. **Mitigation**
+   ```
+   ☐ If malicious/errant: Disable agent immediately
+   ☐ If legitimate spike: Communicate to budget owner
+   ☐ If optimization needed: Engage CoE engineering
+   ```
+
+4. **Resolution**
+   ```
+   ☐ Implement fix (code optimization, caching, limits)
+   ☐ Update cost baseline if legitimate growth
+   ☐ Adjust alerts as needed
+   ☐ Document lessons learned
+   ```
 
 ---
 
@@ -1112,6 +1437,122 @@ Internet
 | **Shared infrastructure without isolation** | Noisy neighbor; data leakage | Tenant-specific resources; logical/physical isolation |
 | **Inconsistent governance across tenants** | Weakest tenant becomes entry point | Federated governance with centralized standards |
 | **Cross-tenant admin sprawl** | Too many people with cross-tenant access | PIM for cross-tenant roles; regular access reviews |
+
+---
+
+### 8.5 Root Cause Analysis & Remediation Playbooks
+
+#### Anti-Pattern: Oversharing Exposure in Copilot
+
+**Scenario:** Users report Copilot is surfacing confidential documents they shouldn't see.
+
+**Root Cause Analysis:**
+1. **Immediate:** SharePoint permissions too broad (Everyone, All Company)
+2. **Contributing:** No sensitivity labeling on confidential documents
+3. **Systemic:** Self-service site creation without default permissions restrictions
+4. **Cultural:** Users unaware of Copilot's data access scope
+
+**Remediation Playbook:**
+
+| Phase | Actions | Timeline | Owner |
+|-------|---------|----------|-------|
+| **Contain** | Run Purview oversharing report; identify exposed sites | Day 1 | Security |
+| **Remediate** | Restrict broad permissions; apply sensitivity labels | Week 1-2 | M365 Platform |
+| **Prevent** | Enable default labeling; restrict sharing links | Week 2-4 | IAM + Security |
+| **Monitor** | Deploy continuous oversharing detection | Ongoing | Security |
+| **Educate** | Copilot data awareness training for all users | Week 4-8 | Enablement |
+
+---
+
+#### Anti-Pattern: Cross-Tenant Authentication Failure
+
+**Scenario:** Cross-tenant agents suddenly stop working; authentication errors in logs.
+
+**Root Cause Analysis:**
+1. **Immediate:** Certificate expired on multi-tenant app registration
+2. **Contributing:** No monitoring for certificate expiration
+3. **Systemic:** Manual certificate rotation process
+4. **Cultural:** Certificate management not treated as critical path
+
+**Remediation Playbook:**
+
+| Phase | Actions | Timeline | Owner |
+|-------|---------|----------|-------|
+| **Contain** | Emergency certificate generation and deployment | Hours | IAM + M365 Platform |
+| **Remediate** | Update both tenant configurations; validate auth | Day 1 | IAM |
+| **Prevent** | Implement automated cert monitoring (30-day alerts) | Week 1 | AI Operations |
+| **Automate** | Deploy Azure Key Vault auto-rotation | Month 1 | M365 Platform |
+| **Document** | Update runbook; add to operational checklist | Week 2 | CoE |
+
+---
+
+#### Anti-Pattern: Shadow Agents
+
+**Scenario:** Audit discovers 50+ undocumented agents in Copilot Studio environments.
+
+**Root Cause Analysis:**
+1. **Immediate:** Users created agents without going through approval
+2. **Contributing:** Copilot Studio access too permissive
+3. **Systemic:** No agent discovery or inventory process
+4. **Cultural:** Governance perceived as blocker; users go around it
+
+**Remediation Playbook:**
+
+| Phase | Actions | Timeline | Owner |
+|-------|---------|----------|-------|
+| **Discover** | Run environment scan; inventory all agents | Week 1 | M365 Platform |
+| **Assess** | Classify discovered agents (keep, remediate, retire) | Week 2 | CoE + Security |
+| **Register** | Add legitimate agents to registry with owners | Week 3 | CoE |
+| **Restrict** | Implement environment controls (DLP, maker restrictions) | Week 4 | M365 Platform |
+| **Enable** | Streamline approval process; provide templates | Month 2 | CoE |
+| **Communicate** | Share "why governance" messaging; highlight benefits | Ongoing | Enablement |
+
+---
+
+#### Anti-Pattern: Cost Explosion
+
+**Scenario:** Monthly Copilot Credits consumption 400% over budget.
+
+**Root Cause Analysis:**
+1. **Immediate:** New agent using tenant graph grounding for all queries
+2. **Contributing:** No cost estimation during agent design
+3. **Systemic:** No consumption limits or quotas on environments
+4. **Cultural:** "Cloud is free" mindset; no chargeback model
+
+**Remediation Playbook:**
+
+| Phase | Actions | Timeline | Owner |
+|-------|---------|----------|-------|
+| **Contain** | Identify high-consumption agents; optimize or disable | Day 1-3 | CoE + AI Ops |
+| **Analyze** | Run cost attribution report; identify patterns | Week 1 | Finance + CoE |
+| **Optimize** | Implement caching, reduce grounding scope, use classic answers | Week 2-4 | AI Engineering |
+| **Govern** | Set environment quotas; implement cost alerts | Month 1 | M365 Platform |
+| **Chargeback** | Implement cost allocation model to business units | Month 2-3 | Finance + CoE |
+| **Educate** | Add cost estimation to agent design review | Ongoing | CoE |
+
+---
+
+#### Anti-Pattern: Prompt Injection Attack
+
+**Scenario:** Agent produces unauthorized output or performs unintended actions after receiving adversarial input.
+
+**Root Cause Analysis:**
+1. **Immediate:** Agent processed malicious input without validation
+2. **Contributing:** No adversarial testing in CI/CD
+3. **Systemic:** Agent instructions not hardened against injection
+4. **Cultural:** Security viewed as "nice to have" not "must have"
+
+**Remediation Playbook:**
+
+| Phase | Actions | Timeline | Owner |
+|-------|---------|----------|-------|
+| **Contain** | Disable affected agent immediately | Hours | AI Ops + Security |
+| **Investigate** | Analyze attack vector; assess data exposure | Day 1-2 | Security |
+| **Fix** | Harden agent instructions; add input validation | Week 1 | AI Engineering |
+| **Test** | Run adversarial testing suite before re-deployment | Week 1-2 | QA + Security |
+| **Prevent** | Add adversarial testing to CI/CD pipeline | Month 1 | CoE Engineering |
+| **Monitor** | Deploy prompt anomaly detection | Month 1-2 | Security |
+| **Educate** | Prompt engineering security training | Ongoing | CoE |
 
 ---
 

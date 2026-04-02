@@ -1,0 +1,78 @@
+@startuml Agent Center of Excellence Structure
+
+skinparam backgroundColor #FEFEFE
+skinparam componentStyle rectangle
+skinparam defaultFontName Arial
+skinparam defaultFontSize 10
+
+title Agent Center of Excellence - Organizational Structure
+
+rectangle "Executive Sponsors" #ECEFF1 {
+    [CIO] as cio
+    [CDO] as cdo
+    [CISO] as ciso
+}
+
+rectangle "CoE Leadership" #E3F2FD {
+    [CoE Director] as director
+    note right of director
+      Reports to: CIO/CDO
+      Dotted line: CISO, EA Lead, CMO
+    end note
+}
+
+rectangle "CoE Teams" #BBDEFB {
+    package "Standards Team\n(3-5 FTEs)" as standards #90CAF9 {
+        [Lead Architect]
+        [Security Specialist]
+        [Governance Analyst]
+        [Documentation Lead]
+    }
+    
+    package "Engineering Team\n(5-8 FTEs)" as engineering #64B5F6 {
+        [Platform Lead]
+        [Agent Developers (3-4)]
+        [Integration Specialist]
+        [QA/Test Lead]
+    }
+    
+    package "Enablement Team\n(3-4 FTEs)" as enablement #42A5F5 {
+        [Training Lead]
+        [Community Manager]
+        [Support Analysts (2)]
+    }
+}
+
+rectangle "Regional Champions\n(0.5 FTE each)" #FFF3E0 {
+    [Americas Lead] as americas
+    [EMEA Lead] as emea
+    [APAC Lead] as apac
+    [Franchise Liaison] as franchise
+}
+
+rectangle "Stakeholders" #E8F5E9 {
+    [AI Engineering] as aieng
+    [M365 Platform] as m365
+    [Security/SecOps] as secops
+    [Franchise IT] as franchiseit
+}
+
+cio --> director
+cdo --> director
+ciso ..> director : dotted line
+
+director --> standards
+director --> engineering
+director --> enablement
+
+enablement --> americas
+enablement --> emea
+enablement --> apac
+enablement --> franchise
+
+standards ..> aieng : patterns, templates
+engineering ..> m365 : platform services
+standards ..> secops : security review
+franchise ..> franchiseit : liaison
+
+@enduml
