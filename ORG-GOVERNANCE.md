@@ -341,42 +341,101 @@ Business Sponsor ──► Solution Architect ──► Dev Team ──► AI Op
 
 ## 7. EA Governance Integration
 
-### 7.1 TOGAF ADM Alignment
+### 7.1 TOGAF ADM Alignment with Agent Lifecycle
 
-| ADM Phase | Agent Governance Integration |
-|-----------|------------------------------|
-| **Preliminary** | Define agent architecture principles, establish CoE charter |
-| **A: Architecture Vision** | Agent capability vision aligned with business strategy |
-| **B: Business Architecture** | Agent use cases mapped to business capabilities |
-| **C: Information Systems** | Agent data architecture, integration patterns |
-| **D: Technology** | M365, Azure, infrastructure architecture |
-| **E: Opportunities & Solutions** | Agent roadmap, build vs. buy decisions |
-| **F: Migration Planning** | Agent deployment sequencing, tenant migration |
-| **G: Implementation Governance** | Agent design reviews, compliance checks |
-| **H: Architecture Change Management** | Agent change requests, version management |
+The TOGAF Architecture Development Method (ADM) provides a structured approach to enterprise architecture. This section maps ADM phases to the agent development lifecycle, ensuring agents are architected within the enterprise context.
 
-### 7.2 ArchiMate Integration
+#### ADM Phase Mapping
 
-**Agent Architecture Views:**
+| ADM Phase | Agent Lifecycle Phase | Key Activities | Deliverables |
+|-----------|----------------------|----------------|--------------|
+| **Preliminary** | Capability Planning | Define agent architecture principles; Establish CoE charter; Agree stakeholder concerns | Agent Architecture Principles, CoE Charter, Stakeholder Map |
+| **A: Architecture Vision** | Strategic Planning | Align agent capabilities with business strategy; Define high-level agent roadmap | Agent Vision Statement, Capability Roadmap, Business Case |
+| **B: Business Architecture** | Use Case Definition | Map agent use cases to business capabilities; Define agent-enabled processes | Business Capability Map, Process Models, Use Case Catalog |
+| **C: Information Systems** | Design | Define data flows, integration patterns; Specify agent components | Data Flow Diagrams, Integration Architecture, Component Models |
+| **D: Technology** | Technical Design | Specify M365, Azure, infrastructure; Define security architecture | Technology Architecture, Security Model, Infrastructure Design |
+| **E: Opportunities & Solutions** | Solution Planning | Evaluate build vs. buy; Prioritize agent initiatives | Solution Options, Prioritized Backlog, Vendor Assessment |
+| **F: Migration Planning** | Deployment Planning | Sequence agent deployments; Plan tenant migrations | Deployment Roadmap, Migration Plan, Rollout Schedule |
+| **G: Implementation Governance** | Build & Deploy | Execute design reviews; Conduct compliance checks; Manage changes | Architecture Compliance Reports, Design Review Records |
+| **H: Change Management** | Operate & Evolve | Process change requests; Manage agent versions; Retire obsolete agents | Change Request Log, Version Registry, Retirement Plan |
 
-| View | Content | Audience |
-|------|---------|----------|
-| **Motivation** | Agent goals, drivers, requirements | Business stakeholders |
-| **Strategy** | Agent roadmap, capability evolution | Executives, EA |
-| **Business** | Agent processes, roles, services | Business architects |
-| **Application** | Agent components, integrations | Solution architects |
-| **Technology** | Infrastructure, platforms | Enterprise architects |
-| **Implementation** | Deployment projects, milestones | Project managers |
+#### Agent Lifecycle Integration Diagram
+
+```
+TOGAF ADM CYCLE
+┌──────────────────────────────────────────────────────────────────┐
+│                                                                  │
+│  Preliminary ─► A: Vision ─► B: Business ─► C: IS ─► D: Tech    │
+│       │                                                   │      │
+│       │            AGENT LIFECYCLE                        │      │
+│       │    ┌────────────────────────────────────┐        │      │
+│       │    │ Plan → Design → Build → Deploy →   │        │      │
+│       │    │ Operate → Evolve → Retire          │        │      │
+│       │    └────────────────────────────────────┘        │      │
+│       │                                                   │      │
+│       └── H: Change ◄─ G: Implement ◄─ F: Migration ◄─── E      │
+│                                                                  │
+└──────────────────────────────────────────────────────────────────┘
+```
+
+### 7.2 ArchiMate Views for Agent Architecture
+
+ArchiMate provides a visual language for describing enterprise architecture. These views help stakeholders understand agent architecture from their perspective.
+
+#### Motivation View: Why Agents?
+
+| Element Type | Example | Purpose |
+|--------------|---------|---------|
+| **Stakeholder** | Store Manager, CMO, Franchise IT | Who cares about agents |
+| **Driver** | Reduce manual overhead, Improve CX consistency | Why agents matter |
+| **Goal** | Deploy AI agents across franchise network | What we're trying to achieve |
+| **Requirement** | Agents respond in <5s, Comply with security policies | Specific needs |
+| **Constraint** | PCI-DSS compliance, Data residency | Boundaries |
+
+#### Application View: Agent Components
+
+| Layer | Components | Description |
+|-------|------------|-------------|
+| **Application Services** | Store Ops Q&A, Customer Service, Inventory Query | What agents do for users |
+| **Application Components** | Copilot Studio Agent, Custom Engine Agent, Orchestrator | How agents are built |
+| **Supporting Components** | Entra ID, Microsoft Graph, Azure AI, Dataverse | What agents depend on |
+
+#### Technology View: Infrastructure
+
+| Element | Enterprise Tenant | Retail Tenant |
+|---------|-------------------|---------------|
+| **Cloud Infrastructure** | Microsoft 365, Azure | Microsoft 365, Azure |
+| **Copilot Studio Environment** | Production, Dev/Test | Production |
+| **Agent 365 Registry** | Central registry | Federated view |
+| **Azure Subscription** | Custom agents, API hosts | Local integrations |
 
 ### 7.3 Architecture Review Board Integration
 
-| Item | Standard ARB | Agent-Specific Review |
-|------|--------------|----------------------|
-| Trigger | Major technology decisions | Tier 3-4 agent proposals |
-| Participants | Enterprise architects, business leads | + CoE representatives, Security |
-| Criteria | EA principles, standards compliance | + Agent security patterns, data governance |
-| Output | Architecture decision record | + Agent registry entry |
-| Frequency | Bi-weekly | As needed within ARB cadence |
+#### Standard vs. Agent-Specific ARB Review
+
+| Aspect | Standard ARB | Agent-Specific Review |
+|--------|--------------|----------------------|
+| **Trigger** | Major technology decisions, new platforms | Tier 3-4 agent proposals, cross-tenant agents, customer-facing agents |
+| **Participants** | Enterprise architects, business leads, technology leads | + CoE representatives, Security Architect, Data Protection Officer |
+| **Review Criteria** | EA principles, standards compliance, cost-benefit | + OWASP agentic AI risks, data governance, multi-tenant security |
+| **Artifacts Required** | Solution architecture, business case | + Agent design doc, security assessment, cost model |
+| **Output** | Architecture Decision Record (ADR) | + Agent registry entry, Conditional Access config |
+| **Frequency** | Bi-weekly | As needed within ARB cadence |
+| **Escalation** | CTO/CIO | + CISO (for security concerns), DPO (for data concerns) |
+
+#### ARB Submission Checklist for Agents
+
+| Item | Tier 1-2 | Tier 3 | Tier 4 |
+|------|----------|--------|--------|
+| Agent design document | ❌ | ✅ | ✅ |
+| Business case / ROI | ❌ | ✅ | ✅ |
+| Security assessment (OWASP) | ❌ | ✅ | ✅ |
+| Data flow diagram | ❌ | ✅ | ✅ |
+| Cost model / credit estimate | ❌ | ✅ | ✅ |
+| Cross-tenant architecture | ❌ | If applicable | ✅ |
+| Compliance checklist | ❌ | ✅ | ✅ |
+| Incident response plan | ❌ | ❌ | ✅ |
+| Disaster recovery plan | ❌ | ❌ | ✅ |
 
 ---
 
@@ -389,86 +448,180 @@ Business Sponsor ──► Solution Architect ──► Dev Team ──► AI Op
 │              EXECUTIVE STEERING COMMITTEE                       │
 │         (CIO, CDO, CISO, CMO, Franchise Operations)            │
 │                    Frequency: Quarterly                         │
-└─────────────────────────────────┬───────────────────────────────┘
-                                  │
-                                  ▼
+└─────────────────────────────┬───────────────────────────────────┘
+                              │
+                              ▼
 ┌─────────────────────────────────────────────────────────────────┐
 │                 AGENT GOVERNANCE BOARD                          │
 │    (CoE Director, EA Lead, Security Lead, Regional Leads)       │
 │                    Frequency: Monthly                           │
-└─────────────────────────────────┬───────────────────────────────┘
-                                  │
-        ┌─────────────────────────┼─────────────────────────┐
-        │                         │                         │
-        ▼                         ▼                         ▼
-┌───────────────┐       ┌───────────────┐       ┌───────────────┐
-│   TECHNICAL   │       │   SECURITY    │       │   FRANCHISE   │
-│  REVIEW BOARD │       │    COUNCIL    │       │   COUNCIL     │
-│               │       │               │       │               │
-│ Design Reviews│       │ Security      │       │ Franchise     │
-│ Pattern Std   │       │ Assessments   │       │ Requirements  │
-│ Tech Decisions│       │ Incident Mgmt │       │ Cost Review   │
-│               │       │               │       │               │
-│ Weekly        │       │ Bi-weekly     │       │ Monthly       │
-└───────────────┘       └───────────────┘       └───────────────┘
+└─────────────────────────────┬───────────────────────────────────┘
+                              │
+      ┌───────────────────────┼───────────────────────┐
+      │                       │                       │
+      ▼                       ▼                       ▼
+┌───────────────┐   ┌───────────────┐   ┌───────────────┐
+│  TECHNICAL    │   │   SECURITY    │   │   FRANCHISE   │
+│ REVIEW BOARD  │   │    COUNCIL    │   │   COUNCIL     │
+│               │   │               │   │               │
+│ Design Reviews│   │ Security      │   │ Franchise     │
+│ Pattern Std   │   │ Assessments   │   │ Requirements  │
+│ Tech Decisions│   │ Incident Mgmt │   │ Cost Review   │
+│ Weekly        │   │ Bi-weekly     │   │ Monthly       │
+└───────────────┘   └───────────────┘   └───────────────┘
 ```
 
-### 8.2 Meeting Cadences
+### 8.2 Governance Body Charters
 
-| Body | Frequency | Duration | Key Agenda Items |
-|------|-----------|----------|------------------|
-| Executive Steering | Quarterly | 2 hours | Strategy, budget, major decisions |
-| Agent Governance Board | Monthly | 90 min | Roadmap, metrics, escalations |
-| Technical Review Board | Weekly | 60 min | Design reviews, pattern approvals |
-| Security Council | Bi-weekly | 60 min | Security reviews, incident response |
-| Franchise Council | Monthly | 90 min | Franchise requirements, cost allocation |
-| CoE All-Hands | Monthly | 60 min | Team updates, knowledge sharing |
+#### Executive Steering Committee Charter
 
-### 8.3 Escalation Matrix
+| Element | Description |
+|---------|-------------|
+| **Mission** | Provide strategic direction, resource allocation, and executive sponsorship for the enterprise agent program |
+| **Scope** | Enterprise-wide agent strategy, budget, policy, major vendor decisions |
+| **Members** | CIO (Chair), CDO, CISO, CMO, VP Franchise Operations, VP Retail Technology |
+| **Quorum** | Chair + 3 members (including CISO for security matters) |
+| **Authority** | Approve annual agent budget (>$500K), approve Tier 4 agents, approve policy changes |
+| **Decisions** | Majority vote; CISO veto on security matters; tie-breaker by Chair |
+| **Reporting** | Board of Directors (quarterly), Leadership Team (monthly dashboard) |
 
-| Issue Type | Level 1 | Level 2 | Level 3 |
-|------------|---------|---------|---------|
-| Technical | CoE Engineer | CoE Lead | Technical Review Board |
-| Security | Security Analyst | Security Lead | Security Council |
-| Franchise Dispute | Regional Champion | Franchise Council | Governance Board |
-| Budget/Cost | CoE Director | Governance Board | Executive Steering |
-| Vendor Issue | Product Owner | CoE Director | Executive Steering |
+#### Agent Governance Board Charter
+
+| Element | Description |
+|---------|-------------|
+| **Mission** | Operationalize agent governance, oversee CoE performance, resolve escalations |
+| **Scope** | Agent roadmap execution, cross-functional coordination, standards enforcement |
+| **Members** | CoE Director (Chair), EA Lead, Security Lead, Regional Leads (3-5), Franchise Rep |
+| **Quorum** | Chair + 4 members (including Security Lead for Tier 3+ approvals) |
+| **Authority** | Approve Tier 3 agents, approve cross-tenant patterns, allocate CoE resources |
+| **Decisions** | Consensus preferred; majority vote; Security Lead veto on security patterns |
+| **Reporting** | Executive Steering (quarterly), CoE Teams (weekly) |
+
+#### Technical Review Board Charter
+
+| Element | Description |
+|---------|-------------|
+| **Mission** | Ensure technical quality, pattern compliance, and architectural consistency |
+| **Scope** | Agent design reviews, pattern standardization, technical decisions |
+| **Members** | CoE Lead Architect (Chair), Solution Architects (3-5), Security Architect, Platform Engineer |
+| **Quorum** | Chair + 3 members |
+| **Authority** | Approve/reject agent designs, define patterns, grant technical exceptions |
+| **Decisions** | Consensus; Chair decides on tie; escalate to Governance Board if unresolved |
+| **Reporting** | Agent Governance Board (monthly summary) |
+
+### 8.3 Meeting Agendas
+
+#### Executive Steering Committee (Quarterly, 2 hours)
+
+| Time | Agenda Item | Owner | Materials |
+|------|-------------|-------|-----------|
+| 0:00 | Opening & Agenda Review | Chair | Agenda |
+| 0:05 | Previous Action Items | Chair | Action log |
+| 0:15 | Agent Program Dashboard | CoE Director | KPI dashboard |
+| 0:35 | Financial Review | FinOps Lead | Budget vs. actuals |
+| 0:55 | Strategic Initiatives Update | CoE Director | Roadmap status |
+| 1:15 | Risk & Security Update | CISO | Risk register |
+| 1:30 | Franchise Feedback | VP Franchise Ops | Survey results |
+| 1:45 | Decision Items | Chair | Decision papers |
+| 1:55 | Next Steps & Close | Chair | Action items |
+
+#### Agent Governance Board (Monthly, 90 min)
+
+| Time | Agenda Item | Owner | Materials |
+|------|-------------|-------|-----------|
+| 0:00 | Opening & Agenda Review | Chair | Agenda |
+| 0:05 | Previous Action Items | Chair | Action log |
+| 0:10 | KPI Dashboard Review | CoE Director | Monthly metrics |
+| 0:25 | Tier 3 Agent Approvals | Technical Board Rep | Design summaries |
+| 0:40 | Security Council Report | Security Lead | Incident summary, risk updates |
+| 0:50 | Franchise Council Report | Franchise Rep | Requirements, cost issues |
+| 1:00 | Escalations & Exceptions | Chair | Escalation log |
+| 1:15 | Roadmap Updates | CoE Director | Milestone status |
+| 1:25 | Next Steps & Close | Chair | Action items |
+
+#### Technical Review Board (Weekly, 60 min)
+
+| Time | Agenda Item | Owner | Materials |
+|------|-------------|-------|-----------|
+| 0:00 | Opening & Priorities | Chair | Queue |
+| 0:05 | Design Review #1 | Presenting Architect | Design doc |
+| 0:20 | Design Review #2 | Presenting Architect | Design doc |
+| 0:35 | Pattern Proposals | Standards Lead | Pattern RFC |
+| 0:45 | Technical Debt & Issues | Platform Lead | Issue log |
+| 0:55 | Next Week Preview & Close | Chair | Upcoming queue |
+
+### 8.4 Quorum & Voting Rules
+
+| Body | Standard Quorum | Security Quorum | Decision Method |
+|------|-----------------|-----------------|-----------------|
+| Executive Steering | Chair + 3 | Chair + 3 + CISO | Majority; CISO veto on security |
+| Governance Board | Chair + 4 | Chair + 4 + Security Lead | Consensus/Majority; Security veto |
+| Technical Review Board | Chair + 3 | N/A | Consensus; Chair tie-break |
+| Security Council | Chair + 2 | N/A | Consensus; escalate to CISO |
+| Franchise Council | Chair + 3 | N/A | Majority; escalate on disputes |
+
+**Proxy Rules:**
+- Proxies allowed for routine meetings with 24h notice
+- No proxies for votes on Tier 4 agents or policy changes
+- Written proxy must specify decision authority granted
 
 ---
 
 ## 9. Decision Rights Matrix
 
-### 9.1 Strategic Decisions
+### 9.1 Strategic Decisions (RACI)
 
-| Decision | Executive Steering | Governance Board | CoE Director | Franchise |
-|----------|-------------------|------------------|--------------|-----------|
-| Agent strategy/roadmap | A | R | C | I |
-| Budget allocation | A | R | C | I |
-| Platform selection | A | R | C | I |
-| Major vendor contract | A | R | C | I |
-| Policy changes | A | R | C | C |
+| Decision | Executive Steering | Governance Board | CoE Director | CISO | Franchise Council |
+|----------|-------------------|------------------|--------------|------|-------------------|
+| Agent strategy/roadmap | **A** | R | C | C | I |
+| Annual budget allocation (>$500K) | **A** | R | C | I | I |
+| Platform selection (new vendor) | **A** | R | C | C | I |
+| Major vendor contract (>$100K) | **A** | R | C | I | C |
+| Enterprise policy changes | **A** | R | C | **R** | C |
+| Cross-tenant data sharing policy | **A** | R | C | **R** | **R** |
 
-### 9.2 Tactical Decisions
+### 9.2 Tactical Decisions (RACI)
 
-| Decision | Governance Board | Technical Board | Security Council | Franchise Council |
-|----------|-----------------|-----------------|------------------|-------------------|
-| Tier 4 agent approval | A | R | R | C |
-| Pattern standardization | I | A | C | C |
-| Security exceptions | I | C | A | I |
-| Cost allocation disputes | A | I | I | R |
-| Cross-franchise data sharing | A | C | R | R |
+| Decision | Governance Board | Technical Board | Security Council | CoE Director | Franchise IT |
+|----------|-----------------|-----------------|------------------|--------------|--------------|
+| Tier 4 agent approval | **A** | R | **R** | C | I |
+| Tier 3 agent approval | **A** | R | C | C | I |
+| Pattern standardization | I | **A** | C | R | C |
+| Security exceptions (temporary) | I | C | **A** | I | I |
+| Security exceptions (permanent) | **A** | C | R | C | I |
+| Cost allocation disputes | **A** | I | I | C | R |
+| Cross-franchise data sharing | **A** | C | R | C | R |
+| Template library additions | I | **A** | C | I | C |
 
-### 9.3 Operational Decisions
+### 9.3 Operational Decisions (RACI)
 
-| Decision | CoE Director | Team Lead | Individual | Franchise IT |
-|----------|--------------|-----------|------------|--------------|
-| Tier 1-2 template use | I | I | A | A |
-| Tier 3 agent development | A | R | C | C |
-| Production deployment | A | R | C | I |
-| Incident response | C | A | R | I |
-| Documentation updates | I | A | R | C |
+| Decision | CoE Director | Team Lead | CoE Engineer | Franchise IT | End User |
+|----------|--------------|-----------|--------------|--------------|----------|
+| Tier 1-2 template deployment | I | I | I | **A** | I |
+| Tier 3 agent development start | **A** | R | C | C | I |
+| Production deployment (Tier 1-2) | I | I | I | **A** | I |
+| Production deployment (Tier 3+) | **A** | R | C | I | I |
+| Incident response (P3/P4) | I | **A** | R | I | I |
+| Incident response (P1/P2) | **A** | R | C | I | I |
+| Documentation updates | I | **A** | R | C | I |
+| Minor configuration changes | I | I | **A** | I | I |
 
 **Legend:** A = Accountable, R = Responsible, C = Consulted, I = Informed
+
+### 9.4 Specific Approval Thresholds
+
+| Scenario | Approval Authority | Escalation Path | SLA |
+|----------|-------------------|-----------------|-----|
+| Agent accessing **customer PII** | CISO sign-off required | DPO if cross-border | 5 business days |
+| Agent accessing **payment data (PCI)** | CISO + Compliance sign-off | Legal if third-party | 10 business days |
+| Agent with **write access** to production systems | Security Council | Governance Board | 5 business days |
+| **Cross-tenant** agent deployment | Governance Board | Executive Steering | 10 business days |
+| Agent with **external API** access | Security Council | Governance Board (if new vendor) | 3 business days |
+| **Autonomous agent** (triggers without user) | Governance Board | Executive Steering | 10 business days |
+| Agent cost >**$10K/month projected** | CoE Director | Governance Board | 3 business days |
+| Agent cost >**$50K/month projected** | Governance Board | Executive Steering | 5 business days |
+| Agent interacting with **HR/payroll** data | CISO + HR VP | DPO | 10 business days |
+| Agent deployed to **>100 franchise locations** | Franchise Council | Governance Board | 5 business days |
 
 ---
 
@@ -476,43 +629,217 @@ Business Sponsor ──► Solution Architect ──► Dev Team ──► AI Op
 
 ### 10.1 Phase 1: Foundation (Months 1-3)
 
-| Activity | Owner | Deliverables |
-|----------|-------|--------------|
-| CoE charter approval | Executive Steering | Signed charter |
-| Core team hiring | HR + CoE Director | 8-10 FTEs onboarded |
-| Governance framework | CoE Standards | Policies, procedures |
-| Platform setup | CoE Engineering | Dev/test environments |
-| Franchise engagement | CoE Enablement | Communication plan |
+#### Objectives
+- Establish governance framework and CoE organizational structure
+- Configure foundational platform infrastructure
+- Engage franchises and build stakeholder alignment
+
+#### Deliverables
+
+| Deliverable | Description | Owner | Due |
+|-------------|-------------|-------|-----|
+| CoE Charter | Signed charter with executive sponsorship | Executive Steering | Month 1 |
+| Governance Framework Doc | Policies, procedures, decision rights | CoE Standards | Month 2 |
+| Role Definitions | Job descriptions for all CoE roles | HR + CoE Director | Month 1 |
+| Staffing Plan | Hiring plan for 8-10 initial FTEs | HR + CoE Director | Month 1 |
+| Core Team Onboarded | Initial team hired and oriented | HR + CoE Director | Month 3 |
+| Platform Setup | Dev/test Copilot Studio environments in both tenants | CoE Engineering | Month 2 |
+| Agent 365 Configuration | Registry, baseline policies, monitoring | CoE Engineering | Month 3 |
+| Stakeholder Communication | Awareness campaign, franchise comms | CoE Enablement | Month 1-3 |
+
+#### Success Criteria
+
+| Criterion | Target | Measurement |
+|-----------|--------|-------------|
+| Charter signed | 100% | Executive sign-off |
+| Core team staffed | ≥80% of planned FTEs | Headcount |
+| Environments operational | 2 tenants configured | Environment health checks |
+| Stakeholder awareness | ≥70% leadership aware | Survey |
+
+#### Resource Requirements
+
+| Role | FTEs | Skills |
+|------|------|--------|
+| CoE Director | 1 | Leadership, M365, governance |
+| Lead Architect | 1 | Solution architecture, M365 Copilot |
+| Security Architect | 1 | Identity, compliance, OWASP |
+| Platform Engineers | 2 | Azure, Power Platform, DevOps |
+| Standards Lead | 1 | Documentation, process design |
+| Enablement Lead | 1 | Training, change management |
+| Program Manager | 1 | PMO, stakeholder management |
+
+#### Dependencies
+
+| Dependency | Owner | Risk if Delayed |
+|------------|-------|-----------------|
+| Executive sponsorship | CEO/CIO | Cannot proceed |
+| Budget approval | Finance | Hiring delayed |
+| HR support for hiring | HR | Team formation delayed |
+| M365/Azure licenses | Procurement | Platform setup blocked |
+| Franchise leadership buy-in | VP Franchise Ops | Resistance to rollout |
+
+---
 
 ### 10.2 Phase 2: Pilot (Months 4-6)
 
-| Activity | Owner | Deliverables |
-|----------|-------|--------------|
-| Pilot franchise selection | Franchise Council | 3-5 pilot franchises |
-| Reference agent build | CoE Engineering | 2-3 pilot agents |
-| Training rollout | CoE Enablement | Training materials, sessions |
-| Governance dry run | Governance Board | Process validation |
-| Cost model validation | Finance + CoE | Billing model refinement |
+#### Objectives
+- Deploy 2-3 pilot agents in controlled franchise environments
+- Validate governance processes and cost model
+- Gather feedback for refinement
+
+#### Deliverables
+
+| Deliverable | Description | Owner | Due |
+|-------------|-------------|-------|-----|
+| Pilot Franchise Selection | 3-5 franchises selected and committed | Franchise Council | Month 4 |
+| Reference Agent #1 | Store Operations FAQ agent | CoE Engineering | Month 5 |
+| Reference Agent #2 | Inventory Query agent | CoE Engineering | Month 6 |
+| Training Materials | Admin and end-user training | CoE Enablement | Month 5 |
+| Governance Dry Run | Full lifecycle through governance | Governance Board | Month 5 |
+| Cost Model Validation | Actual vs. projected credit consumption | FinOps | Month 6 |
+| Pilot Feedback Report | Lessons learned, recommendations | CoE Director | Month 6 |
+
+#### Success Criteria
+
+| Criterion | Target | Measurement |
+|-----------|--------|-------------|
+| Pilot agents deployed | ≥2 agents | Agent registry |
+| Pilot franchises active | ≥3 franchises | User telemetry |
+| User satisfaction | ≥3.5/5 | Survey |
+| Cost within 20% of model | ±20% | Credit consumption |
+| Governance cycle time | <10 days for Tier 2 | Process metrics |
+
+#### Resource Requirements
+
+| Role | FTEs | Notes |
+|------|------|-------|
+| All Phase 1 roles | 8 | Continuing |
+| Pilot Support Engineers | 2 | Temporary (can be contractors) |
+| Training Facilitators | 1-2 | Part-time from Enablement |
+| Franchise Champions | 3-5 | Embedded (franchise staff) |
+
+#### Dependencies
+
+| Dependency | Owner | Risk if Delayed |
+|------------|-------|-----------------|
+| Phase 1 completion | CoE Director | Foundation not ready |
+| Franchise commitment | VP Franchise Ops | No pilot sites |
+| Training content ready | CoE Enablement | Users unprepared |
+| Monitoring operational | CoE Engineering | Can't measure success |
+
+---
 
 ### 10.3 Phase 3: Scale (Months 7-12)
 
-| Activity | Owner | Deliverables |
-|----------|-------|--------------|
-| Regional rollout | Regional Champions | All regions enabled |
-| Template library expansion | CoE Engineering | 10+ templates |
-| Champions network | CoE Enablement | 20+ trained champions |
-| Full governance activation | Governance Board | All processes operational |
-| Self-service enablement | CoE Platform | Portal, automation |
+#### Objectives
+- Roll out to all regions/franchises
+- Expand template library
+- Operationalize all governance processes
+
+#### Deliverables
+
+| Deliverable | Description | Owner | Due |
+|-------------|-------------|-------|-----|
+| Regional Rollout Plan | Phased rollout schedule by region | CoE Director | Month 7 |
+| All Regions Enabled | Agents deployed to all regions | Regional Champions | Month 12 |
+| Template Library | 10+ reusable agent templates | CoE Engineering | Month 12 |
+| Champions Network | 20+ trained franchise champions | CoE Enablement | Month 10 |
+| Self-Service Portal | Franchise self-provisioning portal | CoE Platform | Month 11 |
+| Full Governance Activation | All bodies meeting, all processes active | Governance Board | Month 9 |
+| Operational Runbooks | All 4 runbooks tested and approved | CoE Standards | Month 10 |
+
+#### Success Criteria
+
+| Criterion | Target | Measurement |
+|-----------|--------|-------------|
+| Regions enabled | 100% | Deployment tracking |
+| Franchise adoption | ≥50% of franchises using agents | Telemetry |
+| Templates available | ≥10 | Template catalog |
+| Champions trained | ≥20 | Training records |
+| Incidents resolved per SLA | ≥95% | ITSM metrics |
+| Agent uptime | ≥99.5% | Monitoring |
+
+#### Resource Requirements
+
+| Role | FTEs | Notes |
+|------|------|-------|
+| All Phase 2 roles | 10 | Continuing |
+| Additional Engineers | 2-3 | Template development |
+| Regional Champions | 1 per region | Part-time (regional staff) |
+| L1 Support | 2 | Operations handover |
+
+#### Dependencies
+
+| Dependency | Owner | Risk if Delayed |
+|------------|-------|-----------------|
+| Phase 2 success criteria met | CoE Director | Scale on shaky foundation |
+| Regional leadership alignment | VP Franchise Ops | Resistance |
+| Franchise IT capacity | Franchise Council | Deployment bottleneck |
+| Support capacity | Service Desk | Incident backlog |
+
+---
 
 ### 10.4 Phase 4: Optimize (Year 2+)
 
-| Activity | Owner | Deliverables |
-|----------|-------|--------------|
-| Maturity assessment | CoE Director | Maturity scorecard |
-| Continuous improvement | All teams | Process optimizations |
-| Advanced patterns | CoE Standards | Cross-tenant, agentic |
-| Ecosystem expansion | CoE Engineering | Partner integrations |
-| Knowledge management | CoE Enablement | Lessons learned, case studies |
+#### Objectives
+- Achieve target maturity level (Level 4: Managed)
+- Continuous improvement and innovation
+- Ecosystem expansion (partners, advanced patterns)
+
+#### Deliverables
+
+| Deliverable | Description | Owner | Due |
+|-------------|-------------|-------|-----|
+| Maturity Assessment | AI Maturity Model scorecard | CoE Director | Month 13 |
+| Improvement Roadmap | Based on maturity gaps | Governance Board | Month 14 |
+| Advanced Patterns | Multi-agent orchestration, A2A, MCP | CoE Standards | Ongoing |
+| Partner Integrations | 3P agent ecosystem | CoE Engineering | Ongoing |
+| Knowledge Base | Lessons learned, case studies, playbooks | CoE Enablement | Ongoing |
+| Innovation Lab | Sandbox for emerging capabilities | CoE Engineering | Month 15 |
+
+#### Success Criteria
+
+| Criterion | Target | Measurement |
+|-----------|--------|-------------|
+| Maturity Level | ≥Level 4 across dimensions | Maturity assessment |
+| Agent efficiency | <15 credits/conversation avg | Analytics |
+| Innovation pipeline | ≥5 experiments/quarter | Innovation tracking |
+| Partner agents deployed | ≥3 | Agent registry |
+| Knowledge articles | ≥50 | KB metrics |
+
+#### Resource Requirements
+
+| Role | FTEs | Notes |
+|------|------|-------|
+| Steady-state CoE | 12-15 | Based on scale |
+| Innovation Lead | 1 | New role |
+| Partner Manager | 1 | Ecosystem focus |
+| Data Analyst | 1 | Analytics, optimization |
+
+#### Dependencies
+
+| Dependency | Owner | Risk if Delayed |
+|------------|-------|-----------------|
+| Phase 3 completion | CoE Director | Not ready for optimization |
+| Budget for Year 2 | Finance | Stagnation |
+| Continued executive support | CIO | Program defunding |
+| Technology evolution | Microsoft | Platform changes disrupt |
+
+---
+
+### Implementation Timeline
+
+```
+Month:  1   2   3   4   5   6   7   8   9  10  11  12  13  14  15+
+Phase 1 ████████████
+Phase 2             ████████████
+Phase 3                         ████████████████████████
+Phase 4                                                 ████████▶
+
+Milestones: ▲       ▲       ▲           ▲           ▲       ▲
+          Charter  Pilot   Scale      Full       All    Maturity
+          Signed   Start   Start      Gov       Regions  Assess
+```
 
 ---
 
@@ -521,6 +848,7 @@ Business Sponsor ──► Solution Architect ──► Dev Team ──► AI Op
 | Version | Date | Author | Changes |
 |---------|------|--------|---------|
 | 1.0 | 2026-04-02 | Enterprise Architecture | Initial release |
+| 2.0 | 2026-04-07 | Enterprise Architecture | Expanded sections 7-10 |
 
 ---
 

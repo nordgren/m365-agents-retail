@@ -1,10 +1,10 @@
 # Enterprise Architecture for M365 Agents in Multi-Tenant Retail Environments
 
-**Version:** 3.0  
-**Date:** 2026-04-07  
+**Version:** 3.1  
+**Date:** 2026-04-10  
 **Classification:** Enterprise Architecture Proposal  
 **Scope:** Company-Agnostic, Enterprise-Grade  
-**Updated:** Deep research expansion—RAG grounding, MCP servers, Multi-Agent Orchestration; Copilot Studio native multi-tenant; OWASP Top 10; Agent 365
+**Updated:** QA completion—Operational runbooks, worked cost examples, retail DLP policies; Deep research (RAG, MCP, Multi-Agent); OWASP Top 10; Agent 365
 
 ---
 
@@ -376,6 +376,179 @@ Even with Agent 365, organizations may retain custom components for:
 - **Integration with non-Microsoft systems** (ITSM, legacy GRC tools)
 - **Industry-specific compliance requirements** not covered by Purview
 - **Advanced analytics** beyond Agent 365's native visualization
+
+### 3.7 Worked Cost Examples
+
+The following models estimate total cost of ownership for three retail deployment scenarios. All figures are illustrative and should be validated with current Microsoft pricing.
+
+---
+
+#### Scenario 1: 500-User Corporate Pilot (Pattern A)
+
+**Profile:**
+- Single tenant (corporate only)
+- 500 knowledge workers
+- 3 agents: Store Ops FAQ, HR Policy, IT Help Desk
+- 6-month pilot duration
+
+**Monthly Cost Breakdown:**
+
+| Cost Component | Quantity | Unit Cost | Monthly Cost |
+|----------------|----------|-----------|--------------|
+| **Licensing** | | | |
+| M365 E5 (existing) | 500 | $0 (sunk) | $0 |
+| Microsoft 365 Copilot | 500 | $30 | $15,000 |
+| Agent 365 Standalone | 500 | $15 | $7,500 |
+| **Copilot Credits** | | | |
+| Classic answers (est. 2,000/month) | 2,000 | 1 credit | 2,000 credits |
+| Generative answers (est. 3,000/month) | 3,000 | 2 credits | 6,000 credits |
+| Agent actions (est. 500/month) | 500 | 5 credits | 2,500 credits |
+| **Subtotal credits** | | | 10,500 credits |
+| Credit cost (pay-as-you-go) | 10,500 | $0.01 | $105 |
+| **Azure Infrastructure** | | | |
+| Application Insights | 1 | ~$50 | $50 |
+| Key Vault | 1 | ~$5 | $5 |
+| **CoE Staffing** | | | |
+| Shared (0.5 FTE pilot support) | 0.5 | $12,000 | $6,000 |
+| | | | |
+| **MONTHLY TOTAL** | | | **$28,660** |
+| **ANNUAL PROJECTION** | | | **$343,920** |
+
+**Optimization Levers:**
+- Route 50% of queries to classic answers → Save ~$30/month on credits
+- Negotiate M365 E7 bundle (saves ~15% on Copilot + Agent 365)
+- Use prepaid Copilot Credit packs for volume discount (~10-15% savings)
+
+---
+
+#### Scenario 2: 5,000-User Dual-Tenant Deployment (Pattern B)
+
+**Profile:**
+- Two tenants: Enterprise (1,500 users) + Retail (3,500 store associates)
+- 8 agents: Store Ops, Inventory, WFM, Customer Service (Tier 2-3)
+- Cross-tenant inventory and workforce queries
+- Full production deployment
+
+**Monthly Cost Breakdown:**
+
+| Cost Component | Quantity | Unit Cost | Monthly Cost |
+|----------------|----------|-----------|--------------|
+| **Licensing - Enterprise Tenant** | | | |
+| M365 E5 (existing) | 1,500 | $0 (sunk) | $0 |
+| Microsoft 365 Copilot | 1,500 | $30 | $45,000 |
+| Agent 365 | 1,500 | $15 | $22,500 |
+| **Licensing - Retail Tenant** | | | |
+| M365 F3 (existing) | 3,500 | $0 (sunk) | $0 |
+| Agent 365 (cross-tenant access) | 500 subset | $15 | $7,500 |
+| **Copilot Credits - Enterprise** | | | |
+| Generative answers | 15,000 | 2 credits | 30,000 |
+| Tenant Graph Grounding | 5,000 | 10 credits | 50,000 |
+| Agent actions | 8,000 | 5 credits | 40,000 |
+| **Subtotal Enterprise credits** | | | 120,000 |
+| Credit cost (prepaid pack) | 120,000 | $0.008 | $960 |
+| **Copilot Credits - Retail** | | | |
+| Generative answers | 25,000 | 2 credits | 50,000 |
+| Agent actions | 10,000 | 5 credits | 50,000 |
+| **Subtotal Retail credits** | | | 100,000 |
+| Credit cost (prepaid pack) | 100,000 | $0.008 | $800 |
+| **Azure Infrastructure** | | | |
+| API Management (cross-tenant) | 1 | ~$300 | $300 |
+| Application Insights (2 tenants) | 2 | ~$100 | $200 |
+| Key Vault (2 tenants) | 2 | ~$10 | $20 |
+| Azure Functions (custom agents) | 1 | ~$200 | $200 |
+| **CoE Staffing** | | | |
+| CoE Team (10 FTEs) | 10 | $12,000 | $120,000 |
+| | | | |
+| **MONTHLY TOTAL** | | | **$197,480** |
+| **ANNUAL TOTAL** | | | **$2,369,760** |
+
+**Cost Allocation Model (Chargeback):**
+| Tenant | Copilot Credits | Infrastructure | Support | Total/Month |
+|--------|-----------------|----------------|---------|-------------|
+| Enterprise | $960 | $360 | $60,000 | $61,320 |
+| Retail | $800 | $160 | $60,000 | $60,960 |
+| Licensing (pooled) | — | — | — | $75,000 |
+| **Total** | | | | **$197,280** |
+
+**Optimization Levers:**
+- Disable Tenant Graph Grounding for FAQ agents → Save $400/month
+- Negotiate EA with Microsoft for volume discounts (15-20%)
+- Batch agent actions using agent flows (13 credits/100 vs. 5 each)
+- Cache frequent queries → Reduce generative answers 20%
+
+---
+
+#### Scenario 3: 15,000-User Federated Mesh (Pattern C)
+
+**Profile:**
+- Multiple tenants: 1 Enterprise + 5 Regional/Franchise tenants
+- 15,000 total users (2,000 enterprise, 13,000 franchise)
+- 20+ agents including cross-tenant orchestrators
+- Multi-agent orchestration, A2A communication
+- Centralized governance layer
+
+**Monthly Cost Breakdown:**
+
+| Cost Component | Quantity | Unit Cost | Monthly Cost |
+|----------------|----------|-----------|--------------|
+| **Licensing - Enterprise Tenant** | | | |
+| Microsoft 365 E7 (bundled) | 2,000 | $99 | $198,000 |
+| *(includes E5 + Copilot + Agent 365)* | | | |
+| **Licensing - Franchise Tenants** | | | |
+| M365 F3 (frontline, existing) | 10,000 | $0 (sunk) | $0 |
+| Microsoft 365 Copilot (subset) | 3,000 | $30 | $90,000 |
+| Agent 365 Standalone | 3,000 | $15 | $45,000 |
+| **Copilot Credits - All Tenants** | | | |
+| Generative answers | 150,000 | 2 credits | 300,000 |
+| Tenant Graph Grounding | 30,000 | 10 credits | 300,000 |
+| Agent actions | 80,000 | 5 credits | 400,000 |
+| Agent flows (per 100 actions) | 20,000 | 13 credits | 260,000 |
+| **Total credits** | | | 1,260,000 |
+| Credit cost (EA prepaid) | 1,260,000 | $0.007 | $8,820 |
+| **Azure Infrastructure** | | | |
+| API Management (governance layer) | 1 | ~$1,500 | $1,500 |
+| Azure Functions (orchestration) | 1 | ~$800 | $800 |
+| Azure Sentinel (cross-tenant SIEM) | 1 | ~$2,000 | $2,000 |
+| Application Insights (6 tenants) | 6 | ~$150 | $900 |
+| Key Vault (6 tenants) | 6 | ~$15 | $90 |
+| Service Bus (mesh messaging) | 1 | ~$200 | $200 |
+| **CoE Staffing** | | | |
+| CoE Team (20 FTEs) | 20 | $12,000 | $240,000 |
+| Regional Champions (5 FTEs) | 5 | $8,000 | $40,000 |
+| | | | |
+| **MONTHLY TOTAL** | | | **$627,310** |
+| **ANNUAL TOTAL** | | | **$7,527,720** |
+
+**Cost Allocation by Franchise:**
+
+| Franchise Region | Users | Agents | Credits Used | Monthly Allocation |
+|------------------|-------|--------|--------------|-------------------|
+| North America | 4,000 | 5 | 350,000 | $175,000 |
+| Europe | 3,000 | 4 | 280,000 | $145,000 |
+| Asia Pacific | 3,500 | 4 | 320,000 | $160,000 |
+| Latin America | 1,500 | 3 | 180,000 | $80,000 |
+| Middle East | 1,000 | 2 | 130,000 | $67,310 |
+| **Total** | 13,000 | 18 | 1,260,000 | **$627,310** |
+
+**Optimization Levers:**
+- Negotiate Microsoft Strategic Partnership discount (20-25%)
+- Centralize Tenant Graph Grounding to enterprise tenant only
+- Implement aggressive caching and query deduplication (30% credit reduction)
+- Use classic answers for 80% of frontline queries
+- Optimize CoE: reduce to 15 FTEs with automation ($60K/month savings)
+
+---
+
+#### Cost Optimization Summary
+
+| Optimization | Pattern A Savings | Pattern B Savings | Pattern C Savings |
+|--------------|-------------------|-------------------|-------------------|
+| Classic over generative answers | 5-10% | 10-15% | 15-20% |
+| Disable Tenant Graph (where possible) | N/A | 20% credits | 30% credits |
+| Prepaid credit packs | 10-15% | 15-20% | 20-25% |
+| EA / strategic partnership | 5-10% | 10-15% | 20-25% |
+| Response caching | 5% | 10% | 15% |
+| CoE automation | N/A | 10% | 15% |
 
 ---
 
@@ -877,184 +1050,808 @@ Use this decision matrix to select the appropriate reference architecture:
 
 ### 4.7 Operational Runbooks
 
-#### Runbook 1: Agent Deployment
+> **Note:** These runbooks provide step-by-step operational procedures with specific Azure and M365 admin actions. All runbooks include decision trees, rollback procedures, and escalation triggers.
 
-**Trigger:** New agent ready for production deployment
+---
 
-**Prerequisites:**
-- [ ] Agent design approved (Tier 3+: CoE review complete)
-- [ ] Security assessment passed
-- [ ] CI/CD pipeline configured
-- [ ] Monitoring and alerting configured
-- [ ] Documentation complete
-- [ ] Rollback plan documented
+#### Runbook 1: Agent Deployment (All Patterns)
 
-**Steps:**
+**Runbook ID:** RB-DEPLOY-001  
+**Version:** 2.0  
+**Last Updated:** 2026-04-07  
+**Owner:** CoE Engineering Lead
 
-1. **Pre-Deployment Validation**
-   ```
-   ☐ Verify all prerequisites complete
-   ☐ Confirm deployment window with stakeholders
-   ☐ Validate target environment health
-   ☐ Backup current state (if upgrade)
-   ```
+---
 
-2. **Deployment Execution**
-   ```
-   ☐ Execute CI/CD pipeline (Stage → Production)
-   ☐ Monitor pipeline execution
-   ☐ Validate deployment artifacts
-   ```
+##### Trigger Conditions
+- New agent approved for production deployment
+- Major version upgrade of existing agent
+- Agent migration between environments or tenants
 
-3. **Post-Deployment Validation**
-   ```
-   ☐ Execute smoke tests
-   ☐ Verify agent responds correctly
-   ☐ Confirm monitoring/alerting active
-   ☐ Test rollback capability (dry run)
-   ```
+##### Prerequisites Checklist
 
-4. **Go-Live Confirmation**
-   ```
-   ☐ Notify stakeholders of successful deployment
-   ☐ Update agent registry status
-   ☐ Archive deployment artifacts
-   ☐ Close deployment ticket
-   ```
+| Prerequisite | Pattern A | Pattern B | Pattern C | Verification |
+|--------------|-----------|-----------|-----------|--------------|
+| Agent design approved | ✅ Required | ✅ Required | ✅ Required | Check ITSM ticket |
+| Tier 3+: CoE design review | ✅ Required | ✅ Required | ✅ Required | Review board minutes |
+| Security assessment passed | ✅ Required | ✅ Required | ✅ Required | Security scan report |
+| Cross-tenant access configured | ❌ N/A | ✅ Required | ✅ Required | Entra admin verification |
+| B2B/app consent completed | ❌ N/A | ✅ Required | ✅ Required | Service principal check |
+| Agent 365 registry entry | ✅ Required | ✅ Required | ✅ Required | Agent 365 Admin Center |
+| CI/CD pipeline configured | ✅ Required | ✅ Required | ✅ Required | Azure DevOps validation |
+| Monitoring/alerting active | ✅ Required | ✅ Required | ✅ Required | Application Insights check |
+| Rollback plan documented | ✅ Required | ✅ Required | ✅ Required | Runbook attachment |
+| CAB approval (if required) | Per policy | ✅ Required | ✅ Required | CAB ticket closed |
 
-**Rollback Trigger:** Any critical failure in smoke tests
+---
 
-**Rollback Steps:**
+##### Decision Tree: Deployment Path Selection
+
 ```
-☐ Announce rollback decision
-☐ Execute rollback pipeline
-☐ Verify previous version restored
-☐ Notify stakeholders
-☐ Document rollback reason
-☐ Schedule post-mortem
+                    ┌─────────────────────────┐
+                    │ Agent deployment type?  │
+                    └───────────┬─────────────┘
+                                │
+          ┌─────────────────────┼─────────────────────┐
+          ▼                     ▼                     ▼
+    ┌───────────┐         ┌───────────┐         ┌───────────┐
+    │ Pattern A │         │ Pattern B │         │ Pattern C │
+    │ Single    │         │ Dual      │         │ Federated │
+    │ Tenant    │         │ Tenant    │         │ Mesh      │
+    └─────┬─────┘         └─────┬─────┘         └─────┬─────┘
+          │                     │                     │
+          ▼                     ▼                     ▼
+    ┌───────────┐         ┌───────────┐         ┌───────────┐
+    │ Deploy to │         │ Deploy to │         │ Deploy    │
+    │ single    │         │ Enterprise│         │ governance│
+    │ Copilot   │         │ tenant    │         │ layer     │
+    │ Studio    │         │ first     │         │ first     │
+    │ env       │         │           │         │           │
+    └─────┬─────┘         └─────┬─────┘         └─────┬─────┘
+          │                     │                     │
+          ▼                     ▼                     ▼
+    ┌───────────┐         ┌───────────┐         ┌───────────┐
+    │ Standard  │         │ Configure │         │ Deploy to │
+    │ validation│         │ cross-    │         │ each      │
+    │ & publish │         │ tenant    │         │ tenant    │
+    │           │         │ trust     │         │ runtime   │
+    └─────┬─────┘         └─────┬─────┘         └─────┬─────┘
+          │                     │                     │
+          ▼                     ▼                     ▼
+    ┌───────────┐         ┌───────────┐         ┌───────────┐
+    │ Go-live   │         │ Deploy to │         │ Configure │
+    │           │         │ Retail    │         │ mesh      │
+    │           │         │ tenant    │         │ routing   │
+    └───────────┘         └─────┬─────┘         └─────┬─────┘
+                                │                     │
+                                ▼                     ▼
+                          ┌───────────┐         ┌───────────┐
+                          │ Validate  │         │ End-to-end│
+                          │ cross-    │         │ mesh      │
+                          │ tenant    │         │ validation│
+                          └───────────┘         └───────────┘
 ```
+
+---
+
+##### Step-by-Step Procedure: Pattern A (Single Tenant)
+
+**Phase 1: Pre-Deployment (T-1 day)**
+
+| Step | Action | Azure/M365 Location | Expected Outcome |
+|------|--------|---------------------|------------------|
+| 1.1 | Verify Copilot Studio environment health | Power Platform Admin Center → Environments | Status: Ready |
+| 1.2 | Confirm agent solution in staging | Copilot Studio → Solutions | Version matches release |
+| 1.3 | Validate Application Insights connection | Azure Portal → App Insights → Live Metrics | Telemetry flowing |
+| 1.4 | Check Agent 365 registry | Agent 365 Admin Center → Agent Registry | Entry exists, status: Staging |
+| 1.5 | Notify stakeholders via Teams | Teams Channel: #agent-deployments | Acknowledgment received |
+
+**Phase 2: Deployment Execution (Change Window)**
+
+| Step | Action | Azure/M365 Location | Expected Outcome |
+|------|--------|---------------------|------------------|
+| 2.1 | Export solution from staging | Copilot Studio → Solutions → Export | .zip file downloaded |
+| 2.2 | Import solution to production | Copilot Studio (Prod) → Solutions → Import | Import successful |
+| 2.3 | Publish agent | Copilot Studio → Agent → Publish | Status: Published |
+| 2.4 | Verify Teams channel deployment | Teams Admin Center → Manage apps | Agent visible |
+| 2.5 | Update Agent 365 status | Agent 365 Admin Center → Registry → Edit | Status: Production |
+
+**Phase 3: Validation (T+30 min)**
+
+| Step | Action | Expected Outcome | Rollback Trigger |
+|------|--------|------------------|------------------|
+| 3.1 | Execute smoke test suite | All tests pass | Any failure |
+| 3.2 | Verify agent responds | Correct responses | Incorrect/no response |
+| 3.3 | Check Application Insights | No errors, latency <2s | Error rate >1% |
+| 3.4 | Confirm Conditional Access | Policy applies correctly | Policy not enforced |
+| 3.5 | Test user permissions | ACL trimming works | Unauthorized access |
+
+**Phase 4: Go-Live Confirmation**
+
+| Step | Action | Azure/M365 Location |
+|------|--------|---------------------|
+| 4.1 | Update ITSM ticket | ServiceNow/ITSM → Close with success |
+| 4.2 | Notify stakeholders | Teams Channel: #agent-deployments |
+| 4.3 | Archive deployment artifacts | Azure DevOps → Releases → Tag |
+| 4.4 | Update runbook evidence | SharePoint → Agent Documentation |
+
+---
+
+##### Step-by-Step Procedure: Pattern B (Dual-Tenant)
+
+**Additional Prerequisites:**
+- Cross-tenant access settings configured in both tenants
+- B2B collaboration or multi-tenant app registration consented
+- Certificate-based auth configured in Azure Key Vault
+
+**Phase 1: Enterprise Tenant Deployment (T-1 day)**
+
+| Step | Action | Azure/M365 Location | Notes |
+|------|--------|---------------------|-------|
+| 1.1 | Deploy agent to Enterprise Copilot Studio | Copilot Studio (Enterprise) | Standard deployment |
+| 1.2 | Verify app registration | Entra ID → App registrations | Multi-tenant: Yes |
+| 1.3 | Confirm certificate in Key Vault | Azure Portal → Key Vault → Certificates | Not expiring <30 days |
+| 1.4 | Test enterprise-only functionality | Agent test pane | Passes |
+
+**Phase 2: Cross-Tenant Configuration (Change Window)**
+
+| Step | Action | Azure/M365 Location | Verification |
+|------|--------|---------------------|--------------|
+| 2.1 | Verify Retail Tenant inbound settings | Entra ID (Retail) → External Identities → Cross-tenant access | Enterprise Tenant allowed |
+| 2.2 | Confirm service principal in Retail | Entra ID (Retail) → Enterprise applications | App ID matches |
+| 2.3 | Grant API permissions in Retail | Entra ID (Retail) → Enterprise apps → Permissions | Admin consent granted |
+| 2.4 | Test cross-tenant token acquisition | Postman/Graph Explorer | Token issued successfully |
+
+**Phase 3: Retail Tenant Deployment**
+
+| Step | Action | Azure/M365 Location | Notes |
+|------|--------|---------------------|-------|
+| 3.1 | Deploy retail-facing agent components | Copilot Studio (Retail) or API plugin | Depends on architecture |
+| 3.2 | Configure agent to use Enterprise service | Agent settings → Connections | Certificate auth |
+| 3.3 | Test end-to-end cross-tenant flow | Agent test with Retail user | Data flows correctly |
+| 3.4 | Verify Agent 365 in both tenants | Agent 365 Admin Center (both) | Registered in both |
+
+**Phase 4: Cross-Tenant Validation**
+
+| Test | Method | Pass Criteria | Rollback Trigger |
+|------|--------|---------------|------------------|
+| User from Retail accesses Enterprise data | End-user test | Correct data, ACL enforced | Wrong data or ACL failure |
+| Conditional Access enforced | Sign-in logs | CA policy applied | Policy bypassed |
+| Cross-tenant audit logging | Sentinel query | Events in both tenants | Missing audit trail |
+| Certificate auth working | Monitor auth logs | No client secret usage | Secret auth detected |
+
+---
+
+##### Step-by-Step Procedure: Pattern C (Federated Mesh)
+
+**Additional Prerequisites:**
+- Governance layer deployed (Azure Functions, API Management, Sentinel)
+- All tenant runtimes configured
+- Mesh routing rules defined
+- Multi-tenant agent identity blueprints created
+
+**Phase 1: Governance Layer Deployment**
+
+| Step | Action | Azure Location |
+|------|--------|----------------|
+| 1.1 | Deploy/update policy engine | Azure Functions → Deploy slot |
+| 1.2 | Update API Management routing | APIM → APIs → Agent routing |
+| 1.3 | Configure Sentinel workbooks | Sentinel → Workbooks → Agent mesh |
+| 1.4 | Test governance layer health | Azure Monitor → Dashboard |
+
+**Phase 2: Tenant Runtime Deployments (Rolling)**
+
+| Step | Action | Notes |
+|------|--------|-------|
+| 2.1 | Deploy to Tenant 1 (Enterprise) | Primary tenant, full validation |
+| 2.2 | Validate Tenant 1 | Run test suite |
+| 2.3 | Deploy to Tenant 2 (Retail) | Secondary tenant |
+| 2.4 | Validate cross-tenant Tenant 1↔2 | Cross-tenant test suite |
+| 2.5 | Deploy to Tenants 3-N | Regional/franchise tenants |
+| 2.6 | Validate mesh routing | End-to-end mesh test |
+
+**Phase 3: Mesh Validation**
+
+| Test | Description | Tool |
+|------|-------------|------|
+| Policy propagation | Verify governance rules in all tenants | Azure Functions logs |
+| Cross-mesh routing | Request routes correctly | APIM analytics |
+| Federated identity | WIF tokens accepted across mesh | Entra sign-in logs |
+| Centralized monitoring | All tenants report to Sentinel | Sentinel queries |
+| Failover | Remove one tenant, verify graceful degradation | Chaos engineering |
+
+---
+
+##### Rollback Procedures
+
+**Rollback Decision Tree:**
+```
+                    ┌─────────────────────────┐
+                    │ Issue detected during   │
+                    │ deployment/validation?  │
+                    └───────────┬─────────────┘
+                                │
+          ┌─────────────────────┼─────────────────────┐
+          ▼                     ▼                     ▼
+    ┌───────────┐         ┌───────────┐         ┌───────────┐
+    │ Critical  │         │ Non-      │         │ Minor     │
+    │ (P1/P2)   │         │ Critical  │         │ (P4)      │
+    │ Data/     │         │ (P3)      │         │ Cosmetic  │
+    │ Security  │         │ Degraded  │         │           │
+    └─────┬─────┘         └─────┬─────┘         └─────┬─────┘
+          │                     │                     │
+          ▼                     ▼                     ▼
+    ┌───────────┐         ┌───────────┐         ┌───────────┐
+    │ IMMEDIATE │         │ ROLLBACK  │         │ PROCEED   │
+    │ ROLLBACK  │         │ within    │         │ with      │
+    │ + disable │         │ change    │         │ post-     │
+    │ agent     │         │ window    │         │ deploy    │
+    └───────────┘         └───────────┘         │ fix       │
+                                                └───────────┘
+```
+
+**Pattern A Rollback Steps:**
+
+| Step | Action | Time |
+|------|--------|------|
+| R1 | Announce rollback decision in Teams | T+0 |
+| R2 | Unpublish agent: Copilot Studio → Agent → Unpublish | T+2 min |
+| R3 | Import previous solution version | T+5 min |
+| R4 | Publish previous version | T+8 min |
+| R5 | Validate rollback successful | T+15 min |
+| R6 | Notify stakeholders | T+20 min |
+| R7 | Create incident ticket | T+25 min |
+
+**Pattern B Rollback Steps:**
+
+| Step | Action | Tenant | Time |
+|------|--------|--------|------|
+| R1 | Disable agent in both tenants | Both | T+0 |
+| R2 | Revoke Retail tenant consent (if needed) | Retail | T+5 min |
+| R3 | Restore Enterprise tenant agent | Enterprise | T+10 min |
+| R4 | Restore Retail tenant agent | Retail | T+15 min |
+| R5 | Re-establish cross-tenant trust | Both | T+20 min |
+| R6 | Validate rollback | Both | T+30 min |
+
+**Pattern C Rollback Steps:**
+
+| Step | Action | Scope | Time |
+|------|--------|-------|------|
+| R1 | Activate mesh circuit breaker | Governance | T+0 |
+| R2 | Route traffic to previous version (blue-green) | APIM | T+2 min |
+| R3 | Rollback governance layer | Azure Functions | T+10 min |
+| R4 | Rollback tenant runtimes (parallel) | All tenants | T+20 min |
+| R5 | Restore mesh routing | APIM | T+30 min |
+| R6 | Validate mesh health | All tenants | T+45 min |
+
+---
+
+##### Escalation Triggers
+
+| Condition | Escalation Level | Contact | SLA |
+|-----------|-----------------|---------|-----|
+| Rollback fails | L2: CoE Director | On-call rotation | 15 min |
+| Data exposure suspected | L3: CISO + Legal | Security hotline | Immediate |
+| Cross-tenant auth failure | L2: IAM Lead | IAM on-call | 30 min |
+| Multiple tenants affected | L3: Executive Steering | CIO notification | 1 hour |
+| Vendor/platform issue | L2: Microsoft Support | Premier support | Per contract |
+
+---
+
+##### Post-Deployment Checklist
+
+| Item | Owner | Due |
+|------|-------|-----|
+| Update agent documentation | CoE Enablement | T+1 day |
+| Archive deployment evidence | CoE Engineering | T+1 day |
+| Send deployment report | CoE Director | T+2 days |
+| Close ITSM ticket | Deployer | T+1 day |
+| Schedule 7-day health review | AI Operations | T+7 days |
 
 ---
 
 #### Runbook 2: Cross-Tenant Certificate Rotation
 
-**Trigger:** Certificate expiration approaching (30 days before)
-
-**Frequency:** Annual (or as defined by security policy)
-
-**Steps:**
-
-1. **Preparation (Week 1)**
-   ```
-   ☐ Generate new certificate in Key Vault (Enterprise Tenant)
-   ☐ Export public key for Retail Tenant registration
-   ☐ Schedule change window with both tenant admins
-   ☐ Notify affected teams
-   ```
-
-2. **Enterprise Tenant Update (Change Window)**
-   ```
-   ☐ Add new certificate to app registration (do not remove old)
-   ☐ Validate new certificate is available
-   ☐ Update agent configurations to use new certificate
-   ```
-
-3. **Retail Tenant Update (Change Window)**
-   ```
-   ☐ Update service principal with new certificate
-   ☐ Test cross-tenant authentication with new cert
-   ☐ Validate all agents functional
-   ```
-
-4. **Cleanup (Post-Validation)**
-   ```
-   ☐ Monitor for 7 days with both certificates active
-   ☐ Remove old certificate from app registration
-   ☐ Remove old certificate from Key Vault (after retention)
-   ☐ Update documentation with new expiration date
-   ☐ Schedule next rotation
-   ```
+**Runbook ID:** RB-CERT-001  
+**Version:** 2.0  
+**Last Updated:** 2026-04-07  
+**Owner:** IAM Team Lead
 
 ---
 
-#### Runbook 3: Agent Incident Response
+##### Trigger Conditions
+- Certificate expiration within 30 days (automated alert)
+- Security policy requires rotation (annual)
+- Certificate compromise suspected (immediate)
 
-**Trigger:** Agent incident reported or detected
+##### Prerequisites
 
-**Severity Levels:**
+| Prerequisite | Verification | Responsible |
+|--------------|--------------|-------------|
+| Azure Key Vault access | Can create certificates | IAM Team |
+| Enterprise Tenant admin | Global Admin or App Admin | IAM Team |
+| Retail Tenant admin | Global Admin or App Admin | IAM Team (or Franchise IT) |
+| Change approval | CAB ticket approved | Change Manager |
+| Rollback certificate | Previous cert still valid | IAM Team |
 
-| Severity | Definition | Response Time | Escalation |
-|----------|------------|---------------|------------|
-| **P1** | Agent producing harmful/incorrect critical outputs | 15 min | Security + CoE Director |
-| **P2** | Agent unavailable affecting business operations | 30 min | AI Operations Lead |
-| **P3** | Agent degraded performance or intermittent issues | 4 hours | AI Operations |
-| **P4** | Minor issues; cosmetic; workaround available | 24 hours | AI Operations |
+---
 
-**P1/P2 Response Steps:**
+##### Decision Tree: Rotation Type
 
-1. **Immediate Response (0-15 min)**
-   ```
-   ☐ Acknowledge incident
-   ☐ Assess severity and impact
-   ☐ If data exposure: Disable agent immediately
-   ☐ If availability: Check M365 Service Health
-   ☐ Notify incident commander
-   ```
+```
+                    ┌─────────────────────────┐
+                    │ Rotation trigger?       │
+                    └───────────┬─────────────┘
+                                │
+          ┌─────────────────────┼─────────────────────┐
+          ▼                     ▼                     ▼
+    ┌───────────┐         ┌───────────┐         ┌───────────┐
+    │ Scheduled │         │ Policy    │         │ Emergency │
+    │ (30-day   │         │ (Annual)  │         │ (Compro-  │
+    │ warning)  │         │           │         │ mise)     │
+    └─────┬─────┘         └─────┬─────┘         └─────┬─────┘
+          │                     │                     │
+          ▼                     ▼                     ▼
+    ┌───────────┐         ┌───────────┐         ┌───────────┐
+    │ Standard  │         │ Standard  │         │ EXPEDITED │
+    │ rotation  │         │ rotation  │         │ rotation  │
+    │ (2 weeks) │         │ (2 weeks) │         │ (4 hours) │
+    └───────────┘         └───────────┘         └───────────┘
+```
 
-2. **Investigation (15-60 min)**
-   ```
-   ☐ Gather evidence (logs, user reports, screenshots)
-   ☐ Identify root cause category
-   ☐ Determine affected scope (users, data, tenants)
-   ☐ Engage SMEs as needed
-   ```
+---
 
-3. **Containment (Concurrent)**
-   ```
-   ☐ Disable agent if risk continues
-   ☐ Revoke cross-tenant access if breach suspected
-   ☐ Preserve evidence for forensics
-   ☐ Communicate status to stakeholders
-   ```
+##### Step-by-Step Procedure: Standard Rotation
 
-4. **Resolution**
-   ```
-   ☐ Implement fix or workaround
-   ☐ Test fix in non-production
-   ☐ Deploy fix with approval
-   ☐ Verify resolution
-   ☐ Re-enable agent (staged rollout)
-   ```
+**Week 1: Certificate Generation & Preparation**
 
-5. **Post-Incident**
-   ```
-   ☐ Conduct post-mortem (within 72 hours)
-   ☐ Document root cause and remediation
-   ☐ Update runbooks if needed
-   ☐ Implement preventive measures
-   ☐ Close incident
-   ```
+| Step | Action | Azure/M365 Location | CLI/PowerShell |
+|------|--------|---------------------|----------------|
+| 1.1 | Generate new certificate | Azure Portal → Key Vault → Certificates → Generate | `az keyvault certificate create --vault-name <vault> --name <cert-name> --policy @policy.json` |
+| 1.2 | Download public key (.cer) | Key Vault → Certificate → Download in CER format | `az keyvault certificate download --vault-name <vault> --name <cert> --file cert.cer` |
+| 1.3 | Create change ticket | ITSM | N/A |
+| 1.4 | Notify affected teams | Teams: #agent-ops | N/A |
+| 1.5 | Schedule change window | Outlook/Teams | N/A |
+
+**Week 2: Enterprise Tenant Update (Change Window)**
+
+| Step | Action | Azure/M365 Location | CLI/PowerShell |
+|------|--------|---------------------|----------------|
+| 2.1 | Navigate to app registration | Entra ID → App registrations → <Agent App> | N/A |
+| 2.2 | Add new certificate | Certificates & secrets → Upload certificate | `az ad app credential reset --id <app-id> --cert @cert.cer --append` |
+| 2.3 | Verify certificate added | Certificates list shows both old and new | `az ad app credential list --id <app-id>` |
+| 2.4 | Update agent config to use new cert | Copilot Studio → Connections or Key Vault reference | Update Key Vault reference version |
+| 2.5 | Test Enterprise-only auth | Agent test with Enterprise user | N/A |
+
+**Week 2: Retail Tenant Update (Change Window)**
+
+| Step | Action | Azure/M365 Location | Notes |
+|------|--------|---------------------|-------|
+| 3.1 | Navigate to service principal | Entra ID (Retail) → Enterprise applications → <Agent App> | N/A |
+| 3.2 | Update certificate | Properties → Manage → Certificates | May require re-consent |
+| 3.3 | Test cross-tenant auth | Retail user → Enterprise agent | Token acquisition works |
+| 3.4 | Validate all agents functional | Run smoke tests | All pass |
+
+**Week 3: Cleanup (Post-Validation)**
+
+| Step | Action | Timeline |
+|------|--------|----------|
+| 4.1 | Monitor with both certs active | 7 days |
+| 4.2 | Verify no auth failures | Daily check |
+| 4.3 | Remove old certificate from Enterprise app reg | Day 8 |
+| 4.4 | Remove old certificate from Key Vault | Day 15 (retention) |
+| 4.5 | Update documentation | Day 8 |
+| 4.6 | Schedule next rotation | Day 8 |
+
+---
+
+##### Automation via Azure Automation
+
+**Automated Certificate Rotation Runbook (PowerShell):**
+
+```powershell
+# Azure Automation Runbook: Rotate-AgentCertificate
+# Schedule: Monthly check, rotate if expiring within 30 days
+
+param(
+    [string]$KeyVaultName = "agent-keyvault-prod",
+    [string]$CertificateName = "agent-cross-tenant-cert",
+    [string]$AppRegistrationId = "00000000-0000-0000-0000-000000000000",
+    [int]$ExpirationThresholdDays = 30
+)
+
+# Connect using Managed Identity
+Connect-AzAccount -Identity
+
+# Check certificate expiration
+$cert = Get-AzKeyVaultCertificate -VaultName $KeyVaultName -Name $CertificateName
+$expiresIn = ($cert.Expires - (Get-Date)).Days
+
+if ($expiresIn -le $ExpirationThresholdDays) {
+    Write-Output "Certificate expires in $expiresIn days. Initiating rotation..."
+    
+    # Generate new certificate
+    $policy = Get-AzKeyVaultCertificatePolicy -VaultName $KeyVaultName -Name $CertificateName
+    $newCertOp = Add-AzKeyVaultCertificate -VaultName $KeyVaultName -Name "$CertificateName-new" -CertificatePolicy $policy
+    
+    # Wait for certificate creation
+    while ($newCertOp.Status -ne "completed") {
+        Start-Sleep -Seconds 10
+        $newCertOp = Get-AzKeyVaultCertificateOperation -VaultName $KeyVaultName -Name "$CertificateName-new"
+    }
+    
+    # Get new certificate
+    $newCert = Get-AzKeyVaultCertificate -VaultName $KeyVaultName -Name "$CertificateName-new"
+    
+    # Add to app registration (append, don't replace)
+    $certValue = [System.Convert]::ToBase64String($newCert.Certificate.GetRawCertData())
+    New-AzADAppCredential -ApplicationId $AppRegistrationId -CertValue $certValue -EndDate $newCert.Expires
+    
+    # Send notification
+    $webhookUri = Get-AutomationVariable -Name "TeamsWebhookUri"
+    $body = @{
+        "@type" = "MessageCard"
+        "summary" = "Certificate Rotation Initiated"
+        "sections" = @(
+            @{
+                "activityTitle" = "Agent Certificate Rotation"
+                "facts" = @(
+                    @{ "name" = "Certificate"; "value" = $CertificateName }
+                    @{ "name" = "Old Expiry"; "value" = $cert.Expires.ToString() }
+                    @{ "name" = "New Expiry"; "value" = $newCert.Expires.ToString() }
+                    @{ "name" = "Action Required"; "value" = "Update Retail Tenant within 7 days" }
+                )
+            }
+        )
+    }
+    Invoke-RestMethod -Uri $webhookUri -Method Post -Body ($body | ConvertTo-Json -Depth 10) -ContentType "application/json"
+    
+    Write-Output "Certificate rotation initiated. Manual steps required for Retail Tenant."
+} else {
+    Write-Output "Certificate valid for $expiresIn days. No action needed."
+}
+```
+
+**Automation Schedule:**
+- **Frequency:** Weekly (Sunday 02:00 UTC)
+- **Alert:** If expiration <30 days, sends Teams notification
+- **Action:** Auto-generates new cert, adds to Enterprise app reg
+- **Manual Step:** Retail Tenant update still requires manual action (cross-tenant admin)
+
+---
+
+##### Rollback Procedure
+
+| Step | Action | Timeline |
+|------|--------|----------|
+| R1 | Identify authentication failures | T+0 |
+| R2 | Revert Enterprise app reg to old cert | T+5 min |
+| R3 | Revert Retail service principal | T+10 min |
+| R4 | Disable new cert in Key Vault | T+15 min |
+| R5 | Validate auth restored | T+20 min |
+| R6 | Create incident ticket | T+25 min |
+
+---
+
+##### Verification Checklist
+
+| Verification | Method | Expected Result |
+|--------------|--------|-----------------|
+| Token acquisition (Enterprise) | Graph Explorer with app auth | Token issued |
+| Token acquisition (Cross-tenant) | API call from Retail to Enterprise | Token issued |
+| Agent functionality | Smoke test suite | All pass |
+| Audit logging | Entra sign-in logs | Auth events logged |
+| No client secret usage | Sign-in logs filter | 0 secret-based auths |
+
+---
+
+#### Runbook 3: Agent Incident Response (OWASP-Aligned)
+
+**Runbook ID:** RB-INCIDENT-001  
+**Version:** 2.0  
+**Last Updated:** 2026-04-07  
+**Owner:** Security Operations Lead
+
+---
+
+##### Trigger Conditions
+- Agent producing harmful/incorrect outputs (ASI01: Goal Hijack)
+- Unexpected data access or exfiltration (ASI03: Privilege Abuse)
+- Agent unavailable affecting business operations
+- Security alert from Agent 365 or Defender
+- User/stakeholder report of suspicious behavior
+
+##### Severity Classification (OWASP-Aligned)
+
+| Severity | Definition | OWASP Risk Alignment | Response Time | Escalation |
+|----------|------------|---------------------|---------------|------------|
+| **P1** | Data exposure, harmful outputs, security breach | ASI01, ASI03, ASI09, ASI10 | 15 min | CISO + CoE Director |
+| **P2** | Agent unavailable, business impact | ASI08 (Cascading) | 30 min | AI Operations Lead |
+| **P3** | Degraded performance, intermittent issues | ASI02, ASI06 | 4 hours | AI Operations |
+| **P4** | Minor issues, cosmetic, workaround available | — | 24 hours | AI Operations |
+
+---
+
+##### Decision Tree: Incident Classification
+
+```
+                    ┌─────────────────────────────────┐
+                    │ What type of incident?          │
+                    └───────────────┬─────────────────┘
+                                    │
+    ┌───────────────┬───────────────┼───────────────┬───────────────┐
+    ▼               ▼               ▼               ▼               ▼
+┌────────┐    ┌────────┐    ┌────────┐    ┌────────┐    ┌────────┐
+│ Data   │    │ Agent  │    │ Unauth-│    │ Perform│    │ Suspi- │
+│ Expo-  │    │ produc-│    │ orized │    │ ance/  │    │ cious  │
+│ sure   │    │ ing    │    │ access │    │ Availa-│    │ behav- │
+│        │    │ wrong  │    │ attemp-│    │ bility │    │ ior    │
+│        │    │ outputs│    │ ted    │    │        │    │        │
+└───┬────┘    └───┬────┘    └───┬────┘    └───┬────┘    └───┬────┘
+    │             │             │             │             │
+    ▼             ▼             ▼             ▼             ▼
+┌────────┐    ┌────────┐    ┌────────┐    ┌────────┐    ┌────────┐
+│ P1     │    │ P1/P2  │    │ P1     │    │ P2/P3  │    │ P1/P2  │
+│ IMMED. │    │ Assess │    │ IMMED. │    │ Assess │    │ Investi│
+│ DISABLE│    │ impact │    │ DISABLE│    │ scope  │    │ gate   │
+└────────┘    └────────┘    └────────┘    └────────┘    └────────┘
+```
+
+---
+
+##### OWASP Risk-Specific Response Procedures
+
+**ASI01: Agent Goal Hijack (Prompt Injection)**
+
+| Phase | Action | Azure/M365 Location | Time |
+|-------|--------|---------------------|------|
+| Detect | Alert from Agent 365 Threat Protection or user report | Agent 365 Admin Center → Threats | T+0 |
+| Contain | Disable agent | Copilot Studio → Agent → Unpublish | T+5 min |
+| Investigate | Review conversation transcripts (if available) | Copilot Studio → Analytics or Dataverse | T+15 min |
+| Investigate | Query Defender for injection patterns | Defender XDR → Advanced Hunting: `CopilotAgentActivity \| where PromptContent contains_any("ignore previous", "system prompt")` | T+20 min |
+| Remediate | Update system prompt with additional guardrails | Copilot Studio → Agent → Instructions | T+1 hour |
+| Remediate | Enable/strengthen content filtering | Copilot Studio → Settings → Moderation | T+1 hour |
+| Recover | Staged re-enablement with monitoring | Publish → 10% traffic → monitor → 100% | T+2 hours |
+
+**ASI03: Identity & Privilege Abuse**
+
+| Phase | Action | Azure/M365 Location | Time |
+|-------|--------|---------------------|------|
+| Detect | Anomalous access pattern in Entra sign-in logs | Entra ID → Sign-in logs → Filter by app | T+0 |
+| Contain | Revoke agent identity tokens | Entra ID → Enterprise apps → Revoke sessions | T+5 min |
+| Contain | Block Conditional Access | Entra ID → CA → Create blocking policy | T+10 min |
+| Investigate | Query permissions used | Graph Explorer: `GET /servicePrincipals/{id}/oauth2PermissionGrants` | T+20 min |
+| Investigate | Check for over-permissioned scopes | Compare granted vs. required permissions | T+30 min |
+| Remediate | Remove excessive permissions | Entra ID → App registrations → API permissions | T+1 hour |
+| Remediate | Implement least privilege | Update agent to request minimum scopes | T+2 hours |
+| Recover | Re-enable with new permissions | Update CA policy, monitor | T+3 hours |
+
+**ASI08: Cascading Failures**
+
+| Phase | Action | Azure/M365 Location | Time |
+|-------|--------|---------------------|------|
+| Detect | Multiple agents failing simultaneously | Agent 365 Dashboard → Health | T+0 |
+| Contain | Activate circuit breakers | Azure APIM → Policies → Circuit breaker | T+2 min |
+| Contain | Isolate affected agents | Copilot Studio → Disable downstream agents | T+5 min |
+| Investigate | Identify root cause (upstream failure) | Application Insights → Dependency failures | T+15 min |
+| Investigate | Check M365 Service Health | admin.microsoft.com → Service Health | T+5 min |
+| Remediate | Fix root cause or wait for service restoration | Depends on cause | Variable |
+| Recover | Staged re-enablement, upstream first | Enable in order of dependency chain | T+1 hour |
+
+**ASI10: Rogue Agent**
+
+| Phase | Action | Azure/M365 Location | Time |
+|-------|--------|---------------------|------|
+| Detect | Unregistered agent activity or behavioral anomaly | Agent 365 → Shadow Agent Detection | T+0 |
+| Contain | Disable agent immediately | Copilot Studio → Unpublish | T+2 min |
+| Contain | Revoke all agent credentials | Entra ID → App reg → Certificates & secrets → Delete all | T+5 min |
+| Contain | Block at network level (if custom engine) | Azure NSG / Firewall rules | T+10 min |
+| Investigate | Forensic analysis of agent history | Defender XDR → Timeline | T+30 min |
+| Investigate | Determine if configuration drift or compromise | Compare manifest to approved version | T+1 hour |
+| Remediate | Rebuild agent from known-good state | CoE Engineering | T+4 hours |
+| Recover | Deploy fresh agent with enhanced monitoring | Standard deployment + extra logging | T+8 hours |
+
+---
+
+##### Communication Templates
+
+**Initial Notification (P1/P2):**
+```
+AGENT INCIDENT ALERT - [SEVERITY]
+Agent: [Agent Name]
+Tenant(s): [Affected Tenants]
+Time Detected: [Timestamp]
+Impact: [Brief description]
+Current Status: [Investigating/Contained/Mitigating]
+Incident Commander: [Name]
+Next Update: [Time]
+Bridge: [Teams/Zoom link]
+```
+
+**Status Update:**
+```
+AGENT INCIDENT UPDATE - [SEVERITY] - [Status]
+Incident ID: [ID]
+Agent: [Agent Name]
+Summary: [What happened, what we know]
+Actions Taken: [List]
+Current Status: [Investigating/Contained/Resolved]
+ETA to Resolution: [Time or Unknown]
+Next Update: [Time]
+```
+
+---
+
+##### Escalation Matrix
+
+| Condition | Escalate To | Method | SLA |
+|-----------|-------------|--------|-----|
+| P1 not contained in 15 min | CoE Director | Phone + Teams | Immediate |
+| Data breach confirmed | CISO + Legal + DPO | Security hotline | Immediate |
+| Cross-tenant impact | Both Tenant Admins | Phone + Teams | 30 min |
+| Multiple agents affected | Executive Steering | Email + Phone | 1 hour |
+| Media/PR risk | Communications Lead | Phone | 1 hour |
+| Vendor platform issue | Microsoft Premier Support | Support portal | Per contract |
+
+---
+
+##### Post-Incident Checklist
+
+| Item | Owner | Due | Documentation |
+|------|-------|-----|---------------|
+| Incident report (5 Whys) | Incident Commander | 72 hours | SharePoint → Incidents |
+| Root cause analysis | CoE Engineering | 1 week | Technical appendix |
+| Update runbooks | CoE Standards | 2 weeks | This document |
+| Implement preventive measures | Varies | 4 weeks | ITSM ticket |
+| Stakeholder communication | CoE Director | 1 week | Email summary |
+| Lessons learned session | All involved | 2 weeks | Meeting recording |
 
 ---
 
 #### Runbook 4: Cost Anomaly Response
 
-**Trigger:** Cost monitoring alert (>20% deviation from baseline)
+**Runbook ID:** RB-COST-001  
+**Version:** 2.0  
+**Last Updated:** 2026-04-07  
+**Owner:** FinOps Lead
 
-**Steps:**
+---
 
-1. **Detection & Triage**
-   ```
-   ☐ Review alert details (which agents, tenants, time period)
-   ☐ Identify consumption spike source
-   ☐ Determine if legitimate usage or anomaly
-   ```
+##### Trigger Conditions
+- Cost monitoring alert: >20% deviation from 7-day baseline
+- Copilot Credit consumption approaching 80% of allocation
+- Unexpected Azure infrastructure cost spike
+- Franchise chargeback dispute
 
-2. **Investigation**
-   ```
-   ☐ Analyze agent usage patterns
-   ☐ Review recent deployments/changes
-   ☐ Check for runaway processes or infinite loops
+##### Decision Tree: Anomaly Classification
+
+```
+                    ┌─────────────────────────────────┐
+                    │ What type of cost anomaly?      │
+                    └───────────────┬─────────────────┘
+                                    │
+          ┌─────────────────────────┼─────────────────────────┐
+          ▼                         ▼                         ▼
+    ┌───────────┐           ┌───────────┐           ┌───────────┐
+    │ Copilot   │           │ Azure     │           │ Licensing │
+    │ Credits   │           │ Infra     │           │ (Copilot/ │
+    │ Spike     │           │ Cost      │           │ Agent 365)│
+    └─────┬─────┘           └─────┬─────┘           └─────┬─────┘
+          │                       │                       │
+          ▼                       ▼                       ▼
+    ┌───────────┐           ┌───────────┐           ┌───────────┐
+    │ Check:    │           │ Check:    │           │ Check:    │
+    │ - Which   │           │ - Which   │           │ - License │
+    │   agents  │           │   resource│           │   count   │
+    │ - Feature │           │ - Scale   │           │ - Assign- │
+    │   usage   │           │   events  │           │   ments   │
+    └─────┬─────┘           └─────┬─────┘           └─────┬─────┘
+          │                       │                       │
+    ┌─────┴─────┐           ┌─────┴─────┐           ┌─────┴─────┐
+    │Legitimate │           │ Normal    │           │ Expected  │
+    │  spike?   │           │ scaling?  │           │ growth?   │
+    └─────┬─────┘           └─────┬─────┘           └─────┬─────┘
+      Yes │ No                Yes │ No                Yes │ No
+          ▼                       ▼                       ▼
+    ┌───────────┐           ┌───────────┐           ┌───────────┐
+    │ Update    │           │ Review    │           │ Review    │
+    │ baseline  │           │ auto-     │           │ allocation│
+    │ OR        │           │ scaling   │           │ OR        │
+    │ Investigate│          │ policies  │           │ Investigate│
+    └───────────┘           └───────────┘           └───────────┘
+```
+
+---
+
+##### Step-by-Step Procedure: Copilot Credit Spike
+
+**Phase 1: Detection & Triage (0-30 min)**
+
+| Step | Action | Location | Expected Outcome |
+|------|--------|----------|------------------|
+| 1.1 | Review PPAC alert details | Power Platform Admin Center → Licensing → Copilot Studio | Identify environment, time range |
+| 1.2 | Identify top consuming agents | PPAC → Copilot Studio → Agent consumption | List of agents by credit usage |
+| 1.3 | Compare to baseline | Historical usage (7-day, 30-day) | Deviation % |
+| 1.4 | Classify: Legitimate vs. Anomaly | See decision criteria below | Classification |
+
+**Classification Criteria:**
+
+| Factor | Legitimate Spike | Anomaly |
+|--------|-----------------|---------|
+| New agent launched | Expected increase | N/A |
+| Marketing campaign | Expected increase | N/A |
+| Seasonal event (Black Friday) | Expected increase | N/A |
+| No known trigger | Investigate | Likely anomaly |
+| Single agent, extreme spike | Investigate | Likely runaway |
+| Multiple tenants simultaneously | Platform issue? | Check M365 health |
+
+**Phase 2: Investigation (30 min - 2 hours)**
+
+| Step | Action | What to Look For |
+|------|--------|------------------|
+| 2.1 | Drill into top agent | PPAC → Agent → Usage details | Feature breakdown (classic, generative, graph, actions) |
+| 2.2 | Check for recent deployments | ITSM → Recent changes | New version, config change |
+| 2.3 | Review agent logic | Copilot Studio → Topics/Flows | Infinite loops, excessive tool calls |
+| 2.4 | Check for runaway automation | Azure Monitor → Function logs | Autonomous triggers firing repeatedly |
+| 2.5 | Contact franchise (if applicable) | Teams/Email | Unexpected usage pattern |
+
+**Phase 3: Mitigation**
+
+| Scenario | Action | PPAC Location |
+|----------|--------|---------------|
+| Runaway agent (infinite loop) | Disable agent immediately | Copilot Studio → Unpublish |
+| Over-consumption (legitimate) | Add credits or throttle | PPAC → Licensing → Allocate |
+| Inefficient agent design | Optimize (cache, reduce graph calls) | CoE Engineering review |
+| Franchise over-budget | Notify, adjust allocation | Franchise Council escalation |
+
+**Phase 4: Resolution & Documentation**
+
+| Step | Action | Due |
+|------|--------|-----|
+| 4.1 | Implement fix | Immediate |
+| 4.2 | Update baseline if legitimate growth | 1 day |
+| 4.3 | Adjust alerts/thresholds | 1 day |
+| 4.4 | Document in cost tracking | 1 day |
+| 4.5 | Report to Governance Board (if >10% budget impact) | Monthly meeting |
+
+---
+
+##### Cost Optimization Quick Reference
+
+| Cost Driver | Optimization Action | Potential Savings |
+|-------------|---------------------|-------------------|
+| Tenant Graph Grounding (10 credits) | Disable for FAQ agents; use standard SharePoint | 80% per interaction |
+| Excessive generative answers | Route simple queries to classic answers | 50% per query |
+| Agent flow actions (13/100) | Batch actions; optimize flow logic | 20-40% |
+| High-frequency triggers | Add debouncing; increase polling interval | 30-50% |
+| Premium AI tools (100 credits) | Use standard tools unless reasoning required | 85% per use |
+
+---
+
+##### Escalation Triggers
+
+| Condition | Escalate To | Action |
+|-----------|-------------|--------|
+| >50% budget consumed by mid-month | CoE Director | Review allocation |
+| Single agent >20% of total budget | Technical Review Board | Efficiency review |
+| Franchise exceeds allocation | Franchise Council | Cost discussion |
+| Projected overage >$10K/month | Executive Steering | Budget approval |
+| Suspected abuse/fraud | Security Operations | Investigation |
+
+---
+
+##### Verification & Monitoring
+
+| Metric | Target | Alert Threshold | Dashboard |
+|--------|--------|-----------------|-----------|
+| Daily credit consumption | Within 5% of baseline | >20% deviation | PPAC → Copilot Studio |
+| Agent efficiency (credits/conversation) | <15 credits avg | >25 credits | Custom Power BI |
+| Environment utilization | <80% allocated | >90% | PPAC |
+| Month-to-date spend | On budget | >110% projected | Azure Cost Management + PPAC |
+
+---
+
+## 5. Detailed Component Descriptions
    ☐ Identify responsible business unit
    ```
 
@@ -2178,6 +2975,324 @@ CopilotAgentActivity
 - **Connector DLP:** Block or allow specific connectors per environment
 - **Sensitivity Labels:** Agents inherit label restrictions from source content
 - **Prompt Guardrails:** Content filtering on agent inputs/outputs
+
+#### 5.3.3 Retail-Specific DLP Policy Templates
+
+> **Reference:** [Microsoft Purview Data Loss Prevention](https://learn.microsoft.com/en-us/purview/dlp-learn-about-dlp)
+
+The following DLP policies are designed specifically for multi-tenant retail environments where agents handle customer data, payment information, and cross-franchise operations.
+
+---
+
+##### Sensitivity Label Taxonomy for Multi-Tenant Retail
+
+| Label | Sublabel | Description | Agent Behavior |
+|-------|----------|-------------|----------------|
+| **Public** | — | Marketing materials, public FAQs | Full access |
+| **Internal** | General | Internal communications, SOPs | Auth required |
+| **Internal** | Franchise-Restricted | Franchise-specific data | Tenant isolation |
+| **Confidential** | Customer PII | Names, emails, addresses, phone | Masked in responses |
+| **Confidential** | Employee Data | HR records, payroll, performance | HR agent only |
+| **Confidential** | Business Sensitive | Pricing strategies, margins, forecasts | Restricted agents |
+| **Highly Confidential** | Payment Data (PCI) | Card numbers, CVV, auth codes | Blocked from agents |
+| **Highly Confidential** | Health Data (if applicable) | PHI for pharmacy/health retail | Blocked from agents |
+
+**Purview Label Configuration:**
+```
+Sensitivity Labels → Create label
+├── Name: "Confidential - Customer PII"
+├── Description: "Customer personally identifiable information"
+├── Scope: Files, Emails, Meetings, Sites, Groups
+├── Content marking: "CONFIDENTIAL - CUSTOMER PII" watermark
+├── Encryption: None (handled by DLP)
+└── Auto-labeling: 
+    ├── Sensitive info types: Person's name, Email, Phone, Address
+    ├── Confidence: High
+    └── Scope: SharePoint, OneDrive, Exchange
+```
+
+---
+
+##### Policy 1: Customer PII Protection in Agent Responses
+
+**Objective:** Prevent agents from exposing customer PII in responses while allowing lookup and verification.
+
+**Purview DLP Policy Configuration:**
+
+| Setting | Value |
+|---------|-------|
+| **Policy name** | `DLP-Agent-CustomerPII-Protection` |
+| **Mode** | Enforce |
+| **Locations** | Exchange, SharePoint, OneDrive, Teams, Devices |
+| **Conditions** | Content contains: Customer PII (Name + Email + Phone combo) |
+| **Actions** | Block sharing externally; Notify user; Log to audit |
+| **Exceptions** | Customer service agents with PII-approved role |
+
+**Copilot Studio Implementation:**
+
+```
+Agent Settings → Content Moderation → Custom Rules
+├── Rule: "Mask Customer PII"
+├── Pattern: 
+│   ├── Email: [a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}
+│   ├── Phone: \b\d{3}[-.]?\d{3}[-.]?\d{4}\b
+│   ├── SSN: \b\d{3}-\d{2}-\d{4}\b
+├── Action: Replace with [REDACTED]
+└── Log: Yes
+```
+
+**Agent Response Behavior:**
+| Query | Without Policy | With Policy |
+|-------|---------------|-------------|
+| "What's John Smith's email?" | john.smith@email.com | Customer email on file. For verification, please confirm last 4 digits of phone. |
+| "Show me customer 12345's details" | Full profile displayed | Name: John S. Phone: ***-***-1234. Address: [CITY, STATE only] |
+
+---
+
+##### Policy 2: PCI-DSS Compliance for Payment Data
+
+**Objective:** Ensure agents never store, process, or transmit cardholder data in violation of PCI-DSS.
+
+**PCI-DSS Requirements Mapping:**
+
+| PCI-DSS Req | Agent Implementation |
+|-------------|---------------------|
+| 3.2 - Don't store sensitive auth data | Block card data in agent memory/transcripts |
+| 3.4 - Render PAN unreadable | Mask all but last 4 digits |
+| 7.1 - Limit access to cardholder data | No agent access to payment systems |
+| 10.2 - Audit trail | Log all payment-related queries |
+
+**Purview DLP Policy Configuration:**
+
+| Setting | Value |
+|---------|-------|
+| **Policy name** | `DLP-Agent-PCI-Block` |
+| **Mode** | Enforce (Block) |
+| **Conditions** | Credit Card Number (Luhn validated), CVV pattern, Expiration date pattern |
+| **Actions** | Block content; Generate incident report; Alert Security team |
+| **Exceptions** | None (no exceptions for PCI data) |
+
+**Sensitive Information Type - Custom:**
+
+```json
+{
+  "name": "Payment Card Full Number",
+  "description": "Full credit/debit card number (PCI violation risk)",
+  "pattern": {
+    "regex": "\\b(?:4[0-9]{12}(?:[0-9]{3})?|5[1-5][0-9]{14}|3[47][0-9]{13}|6(?:011|5[0-9]{2})[0-9]{12})\\b",
+    "validator": "LuhnCheck"
+  },
+  "confidence": "High"
+}
+```
+
+**Agent Guardrails:**
+
+```
+Agent Instructions (System Prompt):
+├── "NEVER request, display, or store full credit card numbers"
+├── "NEVER request CVV, PIN, or full expiration dates"
+├── "For payment issues, direct to secure payment portal or phone support"
+└── "If user provides card info, respond: 'For security, please do not share card details here. Use our secure payment portal.'"
+```
+
+---
+
+##### Policy 3: Cross-Tenant Data Boundary Enforcement
+
+**Objective:** Prevent data from Enterprise Tenant being accessed/shared to Retail Tenant (and vice versa) except through approved integration points.
+
+**Architecture:**
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                     ENTERPRISE TENANT                                    │
+│  ┌─────────────────────────────────────────────────────────────────┐   │
+│  │ DLP Policy: Block external sharing except to Retail Tenant       │   │
+│  │ Sensitivity Labels: Enterprise-Confidential                      │   │
+│  │ Cross-tenant access: Approved apps only                          │   │
+│  └─────────────────────────────────────────────────────────────────┘   │
+│                               │                                         │
+│                    Approved Integration Points Only                     │
+│                    (Inventory API, WFM API, Pricing API)               │
+│                               │                                         │
+└───────────────────────────────┼─────────────────────────────────────────┘
+                                │
+                    ◄──────────────────────►
+                      Cross-Tenant Trust
+                    (B2B / App Registration)
+                                │
+┌───────────────────────────────┼─────────────────────────────────────────┐
+│                     RETAIL TENANT                                        │
+│                               │                                         │
+│  ┌─────────────────────────────────────────────────────────────────┐   │
+│  │ DLP Policy: Block sharing to Enterprise except via approved APIs │   │
+│  │ Sensitivity Labels: Retail-Confidential                          │   │
+│  │ Agent access: Retail data only (unless cross-tenant agent)       │   │
+│  └─────────────────────────────────────────────────────────────────┘   │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+**Purview DLP Policy - Enterprise Tenant:**
+
+| Setting | Value |
+|---------|-------|
+| **Policy name** | `DLP-CrossTenant-Enterprise-Boundary` |
+| **Mode** | Enforce |
+| **Conditions** | Content labeled "Enterprise-Confidential" AND shared outside organization |
+| **Actions** | Block; Notify compliance team |
+| **Exceptions** | Approved cross-tenant apps (list by App ID) |
+
+**Power Platform DLP - Connector Groups:**
+
+```
+Environment: Production-Enterprise
+├── Business Data Group (Allowed)
+│   ├── SharePoint
+│   ├── Microsoft Graph
+│   ├── Dataverse
+│   └── Approved cross-tenant API connector
+├── Non-Business Data Group (Limited)
+│   ├── HTTP connector (internal endpoints only)
+│   └── Azure Key Vault
+└── Blocked Group
+    ├── All social media connectors
+    ├── All personal storage connectors
+    └── Unapproved external APIs
+```
+
+---
+
+##### Policy 4: Franchise-Specific Data Isolation
+
+**Objective:** Ensure each franchise can only access their own data through agents; prevent cross-franchise data leakage.
+
+**Data Isolation Model:**
+
+| Data Type | Isolation Method | Agent Enforcement |
+|-----------|------------------|-------------------|
+| Store sales data | Row-level security (Dataverse) | User's store affiliation filter |
+| Inventory levels | Store ID column filter | Agent includes store_id in all queries |
+| Customer data | Geographic/store assignment | Agent restricts to assigned region |
+| Employee data | Manager hierarchy | Agent checks reporting chain |
+
+**Dataverse Row-Level Security:**
+
+```
+Security Role: Franchise-Store-User
+├── Entity: Store_Sales
+│   ├── Read: Organization-owned filtered by Store_ID = User.Store_ID
+│   ├── Write: None
+│   └── Create: None
+├── Entity: Inventory
+│   ├── Read: Organization-owned filtered by Store_ID = User.Store_ID
+│   └── Write: Adjustment requests only
+└── Entity: Customer
+    └── Read: Filtered by AssignedStore = User.Store_ID OR Region = User.Region
+```
+
+**Agent Query Injection Pattern:**
+
+```
+Agent Topic: Inventory Query
+├── Trigger: User asks about inventory
+├── Action: Get User Profile
+│   └── Store_ID = System.User.Store_ID
+├── Action: Query Dataverse
+│   └── Filter: Store_ID eq '{Store_ID}'
+└── Response: "Your store ({Store_ID}) has {qty} units of {product}."
+
+# Prevents: User asking about competitor franchise's inventory
+```
+
+**Purview DLP for Franchise Isolation:**
+
+| Setting | Value |
+|---------|-------|
+| **Policy name** | `DLP-Franchise-DataIsolation` |
+| **Mode** | Audit (then Enforce after validation) |
+| **Conditions** | Content contains franchise identifier AND accessed by user from different franchise |
+| **Actions** | Block; Alert franchise compliance officer |
+
+---
+
+##### Policy 5: Employee Data Protection (HR/Payroll)
+
+**Objective:** Restrict agent access to employee data to authorized HR agents and ensure compliance with employment privacy regulations.
+
+**Protected Data Categories:**
+
+| Category | Examples | Protection Level |
+|----------|----------|------------------|
+| Compensation | Salary, bonuses, equity | Highly Confidential |
+| Performance | Reviews, PIPs, ratings | Confidential |
+| Personal | SSN, bank accounts, benefits | Highly Confidential |
+| Health | Leave records, accommodations | Highly Confidential (PHI) |
+| Disciplinary | Warnings, terminations | Confidential |
+
+**Purview DLP Policy:**
+
+| Setting | Value |
+|---------|-------|
+| **Policy name** | `DLP-Agent-EmployeeData-Protection` |
+| **Mode** | Enforce |
+| **Conditions** | Content labeled "Employee Data - HR" OR contains SSN/bank account patterns |
+| **Actions** | Block unless accessed by HR-approved agent; Log all access |
+| **Exceptions** | Self-service (employee viewing own data) via authenticated HR portal |
+
+**Agent Access Matrix:**
+
+| Agent | Employee Self-Data | Team Data | All Employee Data |
+|-------|-------------------|-----------|-------------------|
+| HR Policy FAQ | ❌ | ❌ | ❌ |
+| Employee Self-Service | ✅ Own only | ❌ | ❌ |
+| Manager Agent | ✅ Own | ✅ Direct reports | ❌ |
+| HR Operations Agent | ✅ | ✅ | ✅ (with audit) |
+| Payroll Agent | ✅ Own | ❌ | ✅ (with audit) |
+
+**Conditional Access for HR Agents:**
+
+```
+Policy: HR-Agent-Access-Control
+├── Applies to: HR Operations Agent, Payroll Agent
+├── Conditions:
+│   ├── User risk: Low only
+│   ├── Device: Compliant, corporate-managed
+│   ├── Location: Corporate network OR VPN
+│   └── Session: Max 8 hours
+├── Grant: Allow with MFA
+└── Session controls: Sign-in frequency every 4 hours
+```
+
+---
+
+##### DLP Policy Monitoring & Enforcement
+
+**Purview Compliance Dashboard Alerts:**
+
+| Alert | Trigger | Response |
+|-------|---------|----------|
+| `Agent-PII-Exposure-Attempt` | Agent query returned PII to non-authorized user | Investigate; review agent permissions |
+| `Agent-PCI-Violation` | Payment card data detected in agent context | Immediate disable; incident response |
+| `Cross-Tenant-Leak-Attempt` | Data labeled Enterprise-Confidential sent to Retail | Block; review cross-tenant config |
+| `Franchise-Boundary-Violation` | User accessed another franchise's data | Block; audit user permissions |
+| `HR-Data-Unauthorized-Access` | Non-HR agent accessed employee records | Block; escalate to HR |
+
+**KQL Query for Agent DLP Violations:**
+
+```kusto
+DLPPolicyMatch
+| where Application == "Copilot Studio" or Application == "Microsoft Copilot"
+| where TimeGenerated > ago(7d)
+| summarize 
+    Violations = count(),
+    UniqueUsers = dcount(UserId),
+    UniqueAgents = dcount(ResourceId)
+  by PolicyName, Severity
+| order by Violations desc
+```
+
+---
 
 ### 6.4 Network Security
 
