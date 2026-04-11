@@ -139,14 +139,42 @@ Open `.drawio` files directly in:
 5. **Estimate costs** — Use the cost model in Section 3.6
 6. **Implement with runbooks** — Operational playbooks in Section 3.7
 
+## Key Sources
+
+This research draws on and monitors the following authoritative sources:
+
+| Source | Focus | URL |
+|--------|-------|-----|
+| **Anurag Karuparti's Newsletter** | Multi-tenant identity, zero-trust, Copilot extensibility, AI architecture patterns | <https://newsletter.karuparti.com/> |
+| Microsoft Learn — Copilot Studio | Agent development, deployment, governance | <https://learn.microsoft.com/copilot-studio/> |
+| Microsoft Learn — Agent 365 | Enterprise agent management (preview) | <https://learn.microsoft.com/microsoft-365/agents/> |
+| Microsoft AI Decision Framework | Agent architecture selection | <https://microsoft.github.io/Microsoft-AI-Decision-Framework/> |
+| Microsoft PyRIT | Automated AI red teaming toolkit | <https://github.com/Azure/PyRIT> |
+| agentconfig.org | Repository configuration patterns for AI agents | <https://agentconfig.org/> |
+| OWASP LLM Top 10 | AI/LLM security risks | <https://owasp.org/www-project-top-10-for-large-language-model-applications/> |
+
+### Incorporated from Karuparti Newsletter (v3.2)
+
+| Article | Content Integrated | Architecture Section |
+|---------|-------------------|---------------------|
+| [5 repo files that standardize AI engineering](https://newsletter.karuparti.com/p/standardize-ai-engineering-agents-md-skill-md) | AGENTS.md, SKILL.md, copilot-instructions patterns | Section 5.8 |
+| [How to pick the right Microsoft AI agent architecture](https://newsletter.karuparti.com/p/how-to-pick-the-right-microsoft-ai) | Platform retirements, Build vs Run layer, Decision Framework | Section 3.8 |
+| [How to actually secure your AI Agents](https://newsletter.karuparti.com/p/how-to-actually-secure-your-ai-agents) | Advanced attack patterns, PyRIT, Attack Success Rate | Sections 5.7, 6.7 |
+| [Multi-agent systems with GitHub Copilot and Foundry](https://newsletter.karuparti.com/p/how-i-build-multi-agent-systems-with) | Build layer vs Run layer mental model | Section 3.8 |
+| [How to calculate ROI for agentic systems](https://newsletter.karuparti.com/p/2026-show-ai-roi-or-lose-your-budget) | Complete cost stack, ROI best practices | Section 3.9 |
+
+*Sources are periodically reviewed for updates that may warrant additions to this architecture.*
+
 ## License
 
 This work is provided as enterprise architecture guidance. Adapt freely to your organization's needs.
 
 ---
 
-**Version:** 2.0  
-**Date:** 2026-04-02  
+**Version:** 3.2  
+**Date:** 2026-04-11  
 **Changelog:**
-- v2.0: Added ORG-GOVERNANCE.md, AI-MATURITY-MODEL.md, expanded failure modes, cost model, operational runbooks, new diagrams
+- v3.2: Platform retirements & migration path; Advanced attack patterns (Karuparti); Automated red teaming with PyRIT; Agent development standards (AGENTS.md, SKILL.md); Build vs Run layer; ROI framework
+- v3.0-3.1: Agent 365 integration, OWASP Top 10 mapping, native multi-tenant mode, RAG/MCP expansion, multi-agent orchestration, operational runbooks, worked cost examples
+- v2.0: Added ORG-GOVERNANCE.md, AI-MATURITY-MODEL.md, expanded failure modes, cost model, new diagrams
 - v1.0: Initial architecture document
